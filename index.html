@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlushLab – Beat the Heat</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#04081a;--navy2:#060c22;--blue:#5BB8F5;--speed:0.9s;--active-color:#5BB8F5}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:#fff;font-family:'Nunito',sans-serif;overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+#cursor{position:fixed;pointer-events:none;z-index:9999;width:36px;height:36px;transform:translate(-50%,-50%);will-change:left,top}
+#cursor-ring{position:fixed;pointer-events:none;z-index:9998;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.55);transform:translate(-50%,-50%);will-change:left,top;transition:width .3s,height .3s,background .6s}
+
+/* INTRO */
+#intro{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--navy);transition:opacity .7s ease,visibility .7s ease}
+#intro.gone{opacity:0;visibility:hidden;pointer-events:none}
+.intro-cup{width:90px;margin-bottom:1.6rem;animation:introBounce .7s ease-in-out infinite alternate}
+@keyframes introBounce{from{transform:translateY(0)}to{transform:translateY(-14px)}}
+.intro-fill{height:4px;width:0;background:linear-gradient(90deg,#5BB8F5,#9B3FE8,#F52060,#FFB300);border-radius:2px;margin-top:1.2rem;transition:width .04s linear;max-width:200px}
+.intro-label{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:.8rem;font-weight:700}
+
+/* SCROLL BAR */
+#scroll-bar{position:fixed;top:0;left:0;height:3px;width:0%;z-index:300;background:var(--active-color);border-radius:0 2px 2px 0;transition:background .6s;pointer-events:none}
+
+/* CURSOR GLOW */
+#cursor-glow{position:fixed;width:360px;height:360px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(91,184,245,.06) 0%,transparent 70%);transform:translate(-50%,-50%);transition:background .8s;will-change:left,top}
+
+/* FLAVOR TICKER */
+#flavor-ticker{position:fixed;top:1.1rem;left:50%;transform:translateX(-50%);z-index:210;background:rgba(255,255,255,.06);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:50px;padding:.35rem 1.2rem;font-size:.72rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#fff;opacity:0;transition:opacity .4s,border-color .4s,color .4s;white-space:nowrap;pointer-events:none}
+#flavor-ticker.show{opacity:1}
+
+/* TODAY'S SPECIAL BANNER */
+#todays-special{
+  position:relative;z-index:5;
+  display:flex;align-items:center;justify-content:center;gap:1.2rem;flex-wrap:wrap;
+  padding:.85rem 2rem;
+  background:rgba(255,255,255,.03);
+  border-top:1px solid rgba(255,255,255,.05);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  cursor:none;transition:background .3s;
+}
+#todays-special:hover{background:rgba(255,255,255,.055)}
+.special-label{font-size:.65rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.special-day{font-size:.65rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;padding:.18rem .65rem;border-radius:50px;background:rgba(255,215,0,.12);color:#FFD700;border:1px solid rgba(255,215,0,.25)}
+.special-name{font-family:'Fredoka One',cursive;font-size:1.1rem;letter-spacing:.5px}
+.special-arrow{font-size:.75rem;color:rgba(255,255,255,.35);transition:transform .3s}
+#todays-special:hover .special-arrow{transform:translateX(4px)}
+.special-badge{font-size:.6rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;padding:.18rem .7rem;border-radius:50px;background:rgba(255,215,0,.15);color:#FFD700;border:1px solid rgba(255,215,0,.3);animation:specialPulse 2s ease-in-out infinite}
+@keyframes specialPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,0)}50%{box-shadow:0 0 0 6px rgba(255,215,0,0)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.1rem 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,26,.92);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-logo{font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--blue);letter-spacing:1px;text-decoration:none;cursor:none}
+.nav-links{display:flex;gap:1.6rem;list-style:none;align-items:center}
+.nav-links a{color:rgba(255,255,255,.45);text-decoration:none;font-size:.82rem;letter-spacing:.5px;font-weight:600;transition:color .2s;cursor:none}
+.nav-links a:hover{color:#fff}
+.nav-accent{height:2px;position:absolute;bottom:0;left:0;width:0;background:var(--blue);transition:width .5s ease,background .5s ease}
+#sound-btn{display:flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);padding:.35rem .85rem;border-radius:50px;font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:none;transition:all .3s;font-family:'Nunito',sans-serif;white-space:nowrap}
+#sound-btn:hover{background:rgba(255,255,255,.12);color:#fff}
+#sound-btn.on{border-color:var(--active-color);color:var(--active-color)}
+.sound-icon{font-size:.85rem}
+#sound-btn.on .sound-icon{animation:soundpulse 1.2s ease-in-out infinite}
+@keyframes soundpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+/* DOTS */
+.flavor-dots{position:fixed;right:1.4rem;top:50%;transform:translateY(-50%);z-index:150;display:flex;flex-direction:column;gap:.6rem}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);cursor:none;transition:all .35s;border:none;outline:none}
+.dot.active{background:var(--dot-c,#fff);transform:scale(1.8);box-shadow:0 0 12px var(--dot-c,#fff)}
+
+/* HERO */
+.hero{height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 55%,rgba(30,80,200,.28) 0%,transparent 70%)}
+.crystals{position:absolute;inset:0;pointer-events:none}
+.crystal{position:absolute;opacity:0;animation:cfloat linear infinite}
+@keyframes cfloat{0%{transform:translateY(110vh) rotate(0deg) scale(.5);opacity:0}8%{opacity:.5}92%{opacity:.3}100%{transform:translateY(-10vh) rotate(540deg) scale(1.2);opacity:0}}
+.hero-content{text-align:center;z-index:2;animation:heroIn .9s cubic-bezier(.16,1,.3,1) both}
+@keyframes heroIn{from{transform:translateY(30px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+.hero-tag{font-size:.76rem;letter-spacing:4px;text-transform:uppercase;color:var(--blue);margin-bottom:1rem}
+.hero-logo-svg{width:min(360px,80vw);margin:0 auto 1.5rem;display:block;filter:drop-shadow(0 20px 60px rgba(91,184,245,.35))}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,.5);margin-bottom:.4rem;letter-spacing:.5px}
+.hero-count{font-family:'Fredoka One',cursive;font-size:clamp(1.2rem,3vw,1.5rem);color:rgba(255,255,255,.28);margin-bottom:2.5rem;letter-spacing:2px}
+.hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-p{background:var(--blue);color:#030813;padding:.85rem 2rem;border-radius:50px;font-weight:800;font-size:.9rem;text-decoration:none;transition:all .3s;cursor:none;border:none;font-family:'Nunito',sans-serif}
+.btn-p:hover{background:#fff;box-shadow:0 20px 40px rgba(91,184,245,.35);transform:translateY(-2px)}
+.btn-g{border:1.5px solid rgba(255,255,255,.22);color:#fff;padding:.85rem 2rem;border-radius:50px;font-weight:700;font-size:.9rem;text-decoration:none;transition:all .3s;cursor:none;background:transparent;font-family:'Nunito',sans-serif}
+.btn-g:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+.scroll-hint{position:absolute;bottom:1.8rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:rgba(255,255,255,.28);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;animation:sbounce 2s ease-in-out infinite}
+@keyframes sbounce{0%,100%{transform:translateX(-50%)}50%{transform:translateX(-50%) translateY(6px)}}
+
+/* MARQUEE */
+.marquee-wrap{overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);padding:.65rem 0;background:rgba(255,255,255,.015)}
+.marquee-wrap:hover .marquee-track{animation-play-state:paused}
+.marquee-track{display:flex;align-items:center;animation:marquee 40s linear infinite;width:max-content}
+.marquee-track .msep{font-size:.6rem;color:rgba(255,255,255,.12);padding:0 .5rem;flex-shrink:0;pointer-events:none}
+.marquee-track a.mname{font-size:.71rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;padding:.2rem .6rem;white-space:nowrap;text-decoration:none;border-radius:6px;cursor:none;transition:background .25s,letter-spacing .2s,opacity .2s,transform .2s;opacity:.48;display:inline-block}
+.marquee-track a.mname:hover{opacity:1;letter-spacing:4.5px;transform:scale(1.08);background:rgba(255,255,255,.07)}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+
+/* FLAVOR SECTIONS */
+.fsec{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:7rem 2rem 5rem;touch-action:pan-y}
+.fsec-bg{position:absolute;inset:0;pointer-events:none}
+.aura-pulse{position:absolute;inset:-20%;border-radius:50%;pointer-events:none;opacity:0;animation:auraPulse 4s ease-in-out infinite;background:radial-gradient(ellipse 40% 40% at 50% 50%,var(--fc,transparent) 0%,transparent 65%)}
+@keyframes auraPulse{0%,100%{opacity:0;transform:scale(.88)}50%{opacity:.13;transform:scale(1.12)}}
+.fsec-card{display:flex;align-items:center;gap:5rem;max-width:1080px;width:100%;transform:perspective(1400px) translateZ(-500px) rotateY(28deg) scale(.55);opacity:0;transition:transform var(--speed) cubic-bezier(.16,1,.3,1),opacity calc(var(--speed)*.9) ease}
+.fsec-card.in{transform:perspective(1400px) translateZ(0) rotateY(0) scale(1);opacity:1}
+.fsec:nth-child(even) .fsec-card{flex-direction:row-reverse;transform:perspective(1400px) translateZ(-500px) rotateY(-28deg) scale(.55)}
+.fsec:nth-child(even) .fsec-card.in{transform:perspective(1400px) translateZ(0) rotateY(0) scale(1)}
+.cup-pour-outer{flex:0 0 280px;height:370px;position:relative;transform-style:preserve-3d;transition:transform .12s ease}
+.cup-pour-outer.pouring{animation:pourIn .85s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes pourIn{0%{transform:translateY(-200px) rotate(-8deg);opacity:0}65%{transform:translateY(14px) rotate(2deg);opacity:1}82%{transform:translateY(-6px) rotate(-1deg)}100%{transform:translateY(0) rotate(0);opacity:1}}
+.cup-wrap{width:100%;height:100%;position:absolute;top:0;left:0;animation:cuphover 4.5s ease-in-out infinite}
+@keyframes cuphover{0%,100%{transform:translateY(0) rotate(-2.5deg)}50%{transform:translateY(-18px) rotate(2.5deg)}}
+.cup-wrap svg{filter:drop-shadow(0 30px 50px var(--fshadow,rgba(91,184,245,.3)))}
+.liquid-trail{position:absolute;top:-90px;left:50%;transform:translateX(-50%);width:8px;height:90px;border-radius:4px;pointer-events:none;z-index:5;animation:trailFill .55s ease-out forwards,trailFade .3s ease-in .52s forwards}
+@keyframes trailFill{0%{clip-path:inset(100% 0 0 0)}100%{clip-path:inset(0% 0 0 0)}}
+@keyframes trailFade{0%{opacity:1}100%{opacity:0}}
+.ribbon-new{position:absolute;top:18px;left:-8px;z-index:10;background:linear-gradient(135deg,#FF3B6B,#FF0040);color:#fff;font-size:.62rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;padding:.3rem .85rem;border-radius:0 4px 4px 0;box-shadow:0 4px 16px rgba(255,0,60,.45)}
+.ribbon-new::before{content:'';position:absolute;left:0;bottom:-6px;border:3px solid transparent;border-right-color:#990020;border-top-color:#990020}
+.fow-crown{position:absolute;top:-22px;right:12px;z-index:12;font-size:1.4rem;animation:crownbob 2.2s ease-in-out infinite;filter:drop-shadow(0 0 8px rgba(255,215,0,.7))}
+.fow-label{position:absolute;top:-40px;right:8px;z-index:12;font-size:.55rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#FFD700;background:rgba(0,0,0,.6);padding:.18rem .55rem;border-radius:4px;border:1px solid rgba(255,215,0,.3);white-space:nowrap}
+@keyframes crownbob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-7px) rotate(5deg)}}
+.sec-watermark{position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);font-family:'Fredoka One',cursive;font-size:clamp(4rem,12vw,10rem);color:rgba(255,255,255,.025);white-space:nowrap;pointer-events:none;letter-spacing:4px;user-select:none;z-index:0}
+.finfo{flex:1;max-width:460px}
+.fnum{font-size:.75rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.5rem}
+.premium-badge{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,#FFD700,#FF8C00);color:#2a1000;font-size:.7rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;padding:.3rem .9rem;border-radius:50px;margin-bottom:.75rem;box-shadow:0 4px 18px rgba(255,180,0,.35)}
+.fname{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,4.5vw,3.8rem);line-height:1.05;margin-bottom:1rem;color:var(--fc,#fff);text-shadow:0 0 40px var(--fc-glow,transparent)}
+.ing-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.ing-pill{font-size:.68rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:.28rem .8rem;border-radius:50px;background:var(--fc-dim,rgba(255,255,255,.05));color:var(--fc);border:1px solid var(--fc-border,rgba(255,255,255,.2))}
+.fdesc{font-size:.95rem;color:rgba(255,255,255,.6);line-height:1.75;margin-bottom:1.2rem}
+.fstats{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1.4rem}
+.fstat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:.55rem 1rem;font-size:.75rem;color:rgba(255,255,255,.45);backdrop-filter:blur(8px);display:flex;flex-direction:column;gap:.18rem}
+.fstat b{font-size:1.05rem;font-weight:800;color:var(--fc,#fff);display:block}
+.formula-card{background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1.1rem 1.3rem;margin-bottom:1.4rem;backdrop-filter:blur(12px)}
+.formula-header{font-size:.7rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:var(--fc);margin-bottom:.85rem;display:flex;align-items:center;gap:.5rem}
+.formula-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.55rem}
+.formula-label{font-size:.7rem;font-weight:700;color:rgba(255,255,255,.4);width:90px;flex-shrink:0}
+.formula-bar-track{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.formula-fill{height:100%;border-radius:3px;background:var(--fc);width:0;transition:width 1.4s cubic-bezier(.34,1,.64,1)}
+.fsec-card.in .formula-fill{width:var(--fw,0%)}
+.formula-val{font-size:.72rem;font-weight:800;color:var(--fc);width:34px;text-align:right;flex-shrink:0}
+.moodboard{border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1rem 1.3rem;background:rgba(255,255,255,.02)}
+.mood-header{font-size:.65rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.8rem}
+.mood-words{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:.8rem}
+.mood-word{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--fc)}
+.mood-word-sep{color:rgba(255,255,255,.2);font-size:.8rem;align-self:center}
+.mood-texture{font-size:.72rem;color:rgba(255,255,255,.35);letter-spacing:2px;text-transform:uppercase;margin-bottom:.85rem}
+.mood-palette{display:flex;gap:4px;border-radius:8px;overflow:hidden}
+.mood-swatch{flex:1;height:22px;transition:flex .3s;cursor:none}
+.mood-swatch:first-child{border-radius:6px 0 0 6px}
+.mood-swatch:last-child{border-radius:0 6px 6px 0}
+.mood-swatch:hover{flex:2.5}
+.iparticle{position:absolute;pointer-events:none;animation:ifloat linear infinite;opacity:0}
+@keyframes ifloat{0%{transform:translateY(80vh) rotate(0deg);opacity:0}8%{opacity:.55}92%{opacity:.2}100%{transform:translateY(-10vh) rotate(480deg);opacity:0}}
+
+/* COMBO MIXER */
+#combo-section{padding:7rem 2rem 6rem;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--navy) 0%,#010f20 50%,var(--navy) 100%)}
+.combo-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(91,184,245,.04) 0%,transparent 70%);pointer-events:none}
+.combo-header{text-align:center;margin-bottom:3.5rem;position:relative;z-index:2}
+.combo-eyebrow{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--blue);margin-bottom:.6rem}
+.combo-title{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,5vw,3.5rem);color:#fff;margin-bottom:.5rem}
+.combo-sub{font-size:.9rem;color:rgba(255,255,255,.35);max-width:400px;margin:0 auto}
+.combo-inner{max-width:780px;margin:0 auto;position:relative;z-index:2}
+.combo-pickers{display:flex;align-items:center;justify-content:center;gap:2rem;margin-bottom:2.5rem;flex-wrap:wrap}
+.combo-picker{position:relative;min-width:220px}
+.combo-picker-label{display:block;font-size:.65rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.75rem;text-align:center}
+
+/* custom dropdown trigger */
+.combo-trigger{
+  position:relative;width:100%;
+  background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.1);
+  border-radius:18px;padding:1rem 1.4rem;
+  cursor:none;transition:border-color .3s,background .3s,box-shadow .3s;
+  display:flex;align-items:center;gap:.85rem;
+  user-select:none;
+}
+.combo-trigger:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.22)}
+.combo-trigger.open{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.06);border-radius:18px 18px 0 0}
+.combo-trigger-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;transition:background .3s,box-shadow .3s}
+.combo-trigger-name{font-family:'Fredoka One',cursive;font-size:1.25rem;flex:1;transition:color .3s;letter-spacing:.3px}
+.combo-trigger-chevron{color:rgba(255,255,255,.3);font-size:.7rem;transition:transform .3s,color .3s;flex-shrink:0}
+.combo-trigger.open .combo-trigger-chevron{transform:rotate(180deg);color:rgba(255,255,255,.6)}
+
+/* dropdown list */
+.combo-dropdown{
+  position:absolute;top:100%;left:0;right:0;z-index:100;
+  background:rgba(8,14,40,.97);border:1.5px solid rgba(255,255,255,.12);
+  border-top:none;border-radius:0 0 18px 18px;
+  max-height:0;overflow:hidden;
+  transition:max-height .38s cubic-bezier(.16,1,.3,1);
+  backdrop-filter:blur(20px);
+}
+.combo-dropdown.open{max-height:380px;overflow-y:auto}
+.combo-dropdown::-webkit-scrollbar{width:4px}
+.combo-dropdown::-webkit-scrollbar-track{background:transparent}
+.combo-dropdown::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.combo-option{
+  display:flex;align-items:center;gap:.85rem;
+  padding:.8rem 1.4rem;cursor:none;
+  transition:background .18s;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.combo-option:last-child{border-bottom:none;border-radius:0 0 16px 16px}
+.combo-option:hover{background:rgba(255,255,255,.06)}
+.combo-option.selected{background:rgba(255,255,255,.05)}
+.combo-option-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.combo-option-emoji{font-size:1rem;flex-shrink:0;width:22px;text-align:center}
+.combo-option-name{font-family:'Fredoka One',cursive;font-size:1.05rem;letter-spacing:.3px;transition:color .15s}
+.combo-option.selected .combo-option-name{font-size:1.1rem}
+.combo-option-check{margin-left:auto;font-size:.75rem;opacity:0;transition:opacity .2s;flex-shrink:0}
+.combo-option.selected .combo-option-check{opacity:1}
+
+/* plus sign */
+.combo-plus{font-family:'Fredoka One',cursive;font-size:2.2rem;color:rgba(255,255,255,.15);flex-shrink:0;margin-top:2.2rem;line-height:1;transition:color .4s,transform .3s}
+.combo-plus.active{color:rgba(255,255,255,.4);transform:rotate(45deg) scale(1.2)}
+.combo-mix-btn{
+  display:block;margin:0 auto 2.5rem;
+  background:linear-gradient(135deg,var(--blue),#9B3FE8);color:#fff;
+  padding:.95rem 3rem;border-radius:50px;font-weight:900;font-size:1rem;
+  border:none;cursor:none;font-family:'Nunito',sans-serif;
+  transition:transform .25s,box-shadow .25s;letter-spacing:.5px;
+  box-shadow:0 10px 30px rgba(91,184,245,.25);
+}
+.combo-mix-btn:hover{transform:scale(1.05) translateY(-2px);box-shadow:0 18px 40px rgba(91,184,245,.35)}
+.combo-canvas-wrap{position:relative;width:220px;height:220px;margin:0 auto 2rem;display:none}
+.combo-canvas-wrap.show{display:block}
+#comboCanvas{border-radius:50%;display:block}
+.combo-result-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;padding:2rem 2.5rem;text-align:center;
+  display:none;animation:comboReveal .6s cubic-bezier(.34,1.56,.64,1) both;
+}
+.combo-result-card.show{display:block}
+@keyframes comboReveal{from{transform:scale(.85) translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.combo-result-eq{font-size:.75rem;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:.5rem}
+.combo-result-name{font-family:'Fredoka One',cursive;font-size:2.4rem;margin-bottom:.6rem}
+.combo-result-desc{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.7;max-width:440px;margin:0 auto 1.4rem}
+.combo-wa-btn{display:inline-flex;align-items:center;gap:.5rem;background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.3);color:#25D366;padding:.65rem 1.6rem;border-radius:50px;font-size:.82rem;font-weight:800;cursor:none;transition:all .3s;font-family:'Nunito',sans-serif}
+.combo-wa-btn:hover{background:rgba(37,211,102,.25);transform:scale(1.05)}
+
+/* POPULARITY */
+#popularity-section{padding:6rem 2rem 5rem;position:relative;overflow:hidden}
+.pop-bg{position:absolute;inset:0;background:linear-gradient(180deg,var(--navy) 0%,#020d1c 50%,var(--navy) 100%);pointer-events:none}
+.pop-header{text-align:center;margin-bottom:3.5rem;position:relative;z-index:2}
+.pop-eyebrow{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--blue);margin-bottom:.6rem}
+.pop-title{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,5vw,3.5rem);color:#fff;margin-bottom:.4rem}
+.pop-sub{font-size:.85rem;color:rgba(255,255,255,.3);letter-spacing:.5px}
+.pop-list{max-width:680px;margin:0 auto;position:relative;z-index:2;display:flex;flex-direction:column;gap:1rem}
+.pop-row{display:flex;align-items:center;gap:1.2rem;padding:1rem 1.4rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;transition:transform .3s,border-color .3s;cursor:none}
+.pop-row:hover{transform:translateX(6px);border-color:rgba(255,255,255,.14)}
+.pop-rank{font-family:'Fredoka One',cursive;font-size:1.6rem;color:rgba(255,255,255,.12);width:36px;flex-shrink:0;text-align:center;line-height:1}
+.pop-rank.gold{color:#FFD700;filter:drop-shadow(0 0 8px rgba(255,215,0,.5))}
+.pop-rank.silver{color:#C0C0C0}
+.pop-rank.bronze{color:#CD7F32}
+.pop-name{font-family:'Fredoka One',cursive;font-size:1.1rem;flex:1;min-width:0}
+.pop-bar-wrap{flex:2;min-width:0}
+.pop-bar-track{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.pop-bar-fill{height:100%;border-radius:3px;width:0;transition:width 1.6s cubic-bezier(.34,1,.64,1)}
+.pop-pct{font-size:.78rem;font-weight:800;width:38px;text-align:right;flex-shrink:0}
+.pop-fire{font-size:.85rem;margin-left:.2rem;opacity:0;transition:opacity .3s}
+.pop-row:hover .pop-fire{opacity:1}
+
+/* LAB SECTION */
+#lab-section{padding:7rem 2rem 6rem;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--navy) 0%,#010614 50%,var(--navy) 100%)}
+.lab-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(91,184,245,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(91,184,245,.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+.lab-header{text-align:center;margin-bottom:4rem;position:relative;z-index:2}
+.lab-eyebrow{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--blue);margin-bottom:.6rem}
+.lab-title{font-family:'Fredoka One',cursive;font-size:clamp(2.5rem,5vw,4rem);color:#fff;margin-bottom:.5rem}
+.lab-subtitle{font-size:.82rem;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase}
+.lab-tubes-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:1.8rem;max-width:1000px;margin:0 auto;position:relative;z-index:2}
+.tube-col{display:flex;flex-direction:column;align-items:center;gap:.75rem;width:80px}
+.tube-outer{position:relative;width:52px;height:180px}
+.tube-body{position:absolute;left:8px;right:8px;top:0;bottom:20px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.18);border-bottom:none;border-radius:4px 4px 0 0}
+.tube-bottom{position:absolute;left:8px;right:8px;bottom:0;height:24px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.18);border-top:none;border-radius:0 0 50% 50%}
+.tube-liquid{position:absolute;left:10px;right:10px;bottom:2px;border-radius:0 0 50% 50%;transform:scaleY(0);transform-origin:bottom;transition:transform 1.6s cubic-bezier(.34,1,.64,1);overflow:hidden}
+.tube-rim{position:absolute;top:-6px;left:4px;right:4px;height:10px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.25);border-radius:4px}
+.lab-tubes-grid.animate .tube-liquid{transform:scaleY(1)}
+.tube-chem{font-size:.65rem;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.5px;text-align:center;line-height:1.3}
+.tube-fname{font-size:.6rem;color:rgba(255,255,255,.3);text-align:center;letter-spacing:.3px}
+
+/* BRANCHES */
+#branches-section{padding:7rem 2rem 6rem;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--navy) 0%,#020c1e 50%,var(--navy) 100%)}
+.branches-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(91,184,245,.04) 0%,transparent 65%)}
+.branches-grid-lines{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(91,184,245,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,184,245,.03) 1px,transparent 1px);background-size:50px 50px}
+.branches-header{text-align:center;margin-bottom:4rem;position:relative;z-index:2}
+.branches-eyebrow{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--blue);margin-bottom:.6rem}
+.branches-title{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,5vw,3.5rem);color:#fff;margin-bottom:.5rem}
+.branches-sub{font-size:.9rem;color:rgba(255,255,255,.35)}
+.branches-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:1080px;margin:0 auto;position:relative;z-index:2}
+.branch-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:2rem 1.8rem;position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s,background .35s;cursor:none}
+.branch-card::before{content:'';position:absolute;inset:0;border-radius:20px;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(91,184,245,.07) 0%,transparent 70%);opacity:0;transition:opacity .4s}
+.branch-card:hover{transform:translateY(-6px) scale(1.01);border-color:rgba(91,184,245,.25);background:rgba(255,255,255,.05)}
+.branch-card:hover::before{opacity:1}
+.branch-num{font-family:'Fredoka One',cursive;font-size:3.5rem;line-height:1;color:rgba(255,255,255,.04);position:absolute;top:.8rem;right:1.2rem;pointer-events:none;user-select:none}
+.branch-icon{width:42px;height:42px;border-radius:12px;background:rgba(91,184,245,.1);border:1px solid rgba(91,184,245,.2);display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;transition:background .3s}
+.branch-card:hover .branch-icon{background:rgba(91,184,245,.18)}
+.branch-icon svg{color:var(--blue)}
+.branch-name{font-family:'Fredoka One',cursive;font-size:1.35rem;color:#fff;margin-bottom:.35rem}
+.branch-tag{display:inline-flex;align-items:center;gap:.35rem;font-size:.65rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--blue);background:rgba(91,184,245,.08);border:1px solid rgba(91,184,245,.18);padding:.2rem .7rem;border-radius:50px;margin-bottom:1rem}
+.branch-address{font-size:.88rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:1.2rem;border-left:2px solid rgba(91,184,245,.2);padding-left:.9rem}
+.branch-hours{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:rgba(255,255,255,.35);margin-bottom:.6rem}
+.branch-hours span{color:rgba(255,255,255,.55);font-weight:700}
+.branch-countdown{font-size:.75rem;font-weight:800;margin-bottom:1rem;padding:.3rem .85rem;border-radius:50px;display:inline-block}
+.branch-countdown.open-cd{color:#4CBF24;background:rgba(76,191,36,.08);border:1px solid rgba(76,191,36,.2)}
+.branch-countdown.closed-cd{color:#FFB300;background:rgba(255,179,0,.08);border:1px solid rgba(255,179,0,.2)}
+.branch-status{display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:.22rem .75rem;border-radius:50px}
+.branch-status.open{color:#4CBF24;background:rgba(76,191,36,.1);border:1px solid rgba(76,191,36,.25)}
+.branch-status.opening{color:#FFB300;background:rgba(255,179,0,.1);border:1px solid rgba(255,179,0,.25)}
+.branch-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:statusPulse 1.8s ease-in-out infinite}
+@keyframes statusPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.branch-map-btn{display:flex;align-items:center;gap:.5rem;margin-top:1.1rem;font-size:.78rem;font-weight:800;color:rgba(255,255,255,.4);cursor:none;letter-spacing:.5px;transition:color .25s;padding:.5rem 0;border:none;background:none;font-family:'Nunito',sans-serif}
+.branch-map-btn:hover{color:var(--blue)}
+.branch-card.coming-soon{border-style:dashed;border-color:rgba(255,255,255,.07);background:rgba(255,255,255,.015)}
+.coming-label{font-size:.65rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);padding:.2rem .75rem;border-radius:50px;display:inline-block;margin-bottom:.8rem}
+.branch-coming-text{font-size:.88rem;color:rgba(255,255,255,.25);line-height:1.7}
+
+/* QUIZ */
+#quiz-section{padding:7rem 2rem 6rem;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--navy) 0%,#020b1f 50%,var(--navy) 100%)}
+.quiz-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(91,184,245,.06) 0%,transparent 70%);pointer-events:none}
+.quiz-header{text-align:center;margin-bottom:3.5rem;position:relative;z-index:2}
+.quiz-eyebrow{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--blue);margin-bottom:.6rem}
+.quiz-title{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,5vw,3.5rem);color:#fff;margin-bottom:.5rem}
+.quiz-sub{font-size:.9rem;color:rgba(255,255,255,.4);max-width:420px;margin:0 auto}
+.quiz-card{max-width:580px;margin:0 auto;position:relative;z-index:2}
+.quiz-step{display:none;text-align:center;animation:quizFadeIn .4s ease}
+.quiz-step.active{display:block}
+@keyframes quizFadeIn{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+.quiz-q{font-family:'Fredoka One',cursive;font-size:1.6rem;color:#fff;margin-bottom:.5rem}
+.quiz-hint{font-size:.82rem;color:rgba(255,255,255,.35);margin-bottom:2rem}
+.quiz-options{display:flex;flex-wrap:wrap;gap:.85rem;justify-content:center}
+.quiz-opt{padding:.75rem 1.6rem;border-radius:50px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);font-size:.88rem;font-weight:700;cursor:none;transition:all .25s;font-family:'Nunito',sans-serif;backdrop-filter:blur(8px)}
+.quiz-opt:hover{border-color:rgba(255,255,255,.5);color:#fff;background:rgba(255,255,255,.09);transform:scale(1.05)}
+.quiz-opt.chosen{border-color:var(--qc,#5BB8F5);color:var(--qc,#5BB8F5);background:rgba(255,255,255,.06)}
+.quiz-progress{display:flex;gap:.5rem;justify-content:center;margin-bottom:2.5rem}
+.qpip{width:28px;height:3px;border-radius:2px;background:rgba(255,255,255,.1);transition:background .4s}
+.qpip.done{background:var(--blue)}
+.quiz-result{display:none;text-align:center;animation:quizFadeIn .5s ease}
+.quiz-result.show{display:block}
+.res-emoji{font-size:3rem;margin-bottom:.8rem;animation:introBounce .9s ease-in-out infinite alternate}
+.res-name{font-family:'Fredoka One',cursive;font-size:2.8rem;margin-bottom:.6rem}
+.res-desc{font-size:.95rem;color:rgba(255,255,255,.55);max-width:380px;margin:0 auto 2rem;line-height:1.7}
+.res-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.res-retry{border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);padding:.75rem 1.6rem;border-radius:50px;font-weight:700;font-size:.88rem;cursor:none;background:transparent;font-family:'Nunito',sans-serif;transition:all .3s}
+.res-retry:hover{border-color:#fff;color:#fff}
+.res-go{padding:.75rem 1.8rem;border-radius:50px;font-weight:900;font-size:.88rem;border:none;cursor:none;font-family:'Nunito',sans-serif;transition:all .3s;color:#030813}
+.res-go:hover{transform:scale(1.06)}
+
+/* ORDER BUILDER DRAWER */
+#order-drawer{position:fixed;bottom:0;left:0;right:0;z-index:500;transform:translateY(100%);transition:transform .5s cubic-bezier(.16,1,.3,1);background:rgba(6,10,28,.97);backdrop-filter:blur(30px);border-top:1px solid rgba(255,255,255,.1);border-radius:24px 24px 0 0;padding:2rem 2rem 2.5rem;max-height:92vh;overflow-y:auto}
+#order-drawer.open{transform:translateY(0)}
+.drawer-handle{width:40px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 1.8rem}
+.drawer-title{font-family:'Fredoka One',cursive;font-size:1.8rem;text-align:center;margin-bottom:.3rem}
+.drawer-sub{font-size:.8rem;color:rgba(255,255,255,.35);text-align:center;letter-spacing:1px;text-transform:uppercase;margin-bottom:2rem}
+.drawer-section{margin-bottom:1.8rem}
+.drawer-label{font-size:.68rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.85rem}
+.drawer-flavors{display:flex;flex-wrap:wrap;gap:.6rem}
+.drawer-flavor-btn{
+  padding:.55rem 1.1rem;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04);color:rgba(255,255,255,.55);
+  font-size:.78rem;font-weight:700;cursor:none;font-family:'Nunito',sans-serif;
+  transition:all .2s;letter-spacing:.3px;
+}
+.drawer-flavor-btn:hover{border-color:rgba(255,255,255,.3);color:#fff}
+.drawer-flavor-btn.sel{color:#030813;font-weight:900}
+.drawer-sizes{display:flex;gap:.85rem}
+.drawer-size-btn{flex:1;padding:.85rem;border-radius:14px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:rgba(255,255,255,.55);font-size:.9rem;font-weight:700;cursor:none;font-family:'Nunito',sans-serif;transition:all .25s;text-align:center}
+.drawer-size-btn:hover{border-color:rgba(255,255,255,.3);color:#fff}
+.drawer-size-btn.sel{color:#030813;font-weight:900}
+.drawer-qty-row{display:flex;align-items:center;gap:1.2rem}
+.qty-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#fff;font-size:1.2rem;cursor:none;transition:all .25s;font-family:'Nunito',sans-serif;display:flex;align-items:center;justify-content:center}
+.qty-btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4)}
+#qtyDisplay{font-family:'Fredoka One',cursive;font-size:2rem;min-width:32px;text-align:center;color:#fff}
+.drawer-wa-btn{
+  width:100%;padding:1.1rem;border-radius:16px;border:none;
+  background:linear-gradient(135deg,#25D366,#128C7E);
+  color:#fff;font-size:1rem;font-weight:900;cursor:none;
+  font-family:'Nunito',sans-serif;transition:all .3s;
+  display:flex;align-items:center;justify-content:center;gap:.65rem;
+  margin-top:.5rem;letter-spacing:.5px;
+}
+.drawer-wa-btn:hover{transform:scale(1.02);box-shadow:0 12px 30px rgba(37,211,102,.3)}
+.drawer-wa-btn:disabled{opacity:.4;transform:none;cursor:not-allowed}
+.drawer-close{position:absolute;top:1.5rem;right:1.5rem;width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);cursor:none;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'Nunito',sans-serif}
+.drawer-close:hover{background:rgba(255,255,255,.12);color:#fff}
+#drawer-overlay{position:fixed;inset:0;z-index:499;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .4s}
+#drawer-overlay.show{opacity:1;pointer-events:all;cursor:none}
+
+/* ORDER BAR */
+#order-bar{position:fixed;bottom:0;left:0;right:0;z-index:190;padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;background:rgba(4,8,26,.92);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.07);transform:translateY(100%);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+#order-bar.show{transform:translateY(0)}
+#order-bar-name{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--active-color);transition:color .5s}
+#order-bar-label{font-size:.68rem;color:rgba(255,255,255,.32);letter-spacing:2px;text-transform:uppercase;margin-bottom:.1rem}
+#order-btn{flex-shrink:0;background:var(--active-color);color:#030813;padding:.7rem 1.8rem;border-radius:50px;font-weight:900;font-size:.88rem;border:none;cursor:none;transition:background .5s,transform .2s;font-family:'Nunito',sans-serif;animation:orderpulse 2.5s ease-in-out infinite}
+@keyframes orderpulse{0%,100%{box-shadow:0 0 0 0 rgba(91,184,245,0)}50%{box-shadow:0 0 0 10px rgba(91,184,245,0)}}
+#order-btn:hover{transform:scale(1.05)}
+
+/* BACK TO TOP */
+#back-top{
+  position:fixed;bottom:5.5rem;right:1.5rem;z-index:188;
+  width:48px;height:48px;border-radius:50%;border:none;cursor:none;
+  background:rgba(255,255,255,.07);backdrop-filter:blur(12px);
+  border:1.5px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(20px);
+  transition:opacity .4s,transform .4s,border-color .3s,background .3s;
+  pointer-events:none;
+}
+#back-top.show{opacity:1;transform:translateY(0);pointer-events:all}
+#back-top:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35)}
+#back-top.launching{animation:rocketLaunch .6s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes rocketLaunch{0%{transform:translateY(0) scale(1)}40%{transform:translateY(6px) scale(.9)}100%{transform:translateY(-120px) scale(.3);opacity:0}}
+
+/* FOOTER */
+footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180deg,var(--navy) 0%,var(--navy2) 100%);position:relative;overflow:hidden}
+.footer-glow{position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 50% 0%,rgba(91,184,245,.12) 0%,transparent 70%);pointer-events:none}
+.footer-inner{max-width:1000px;margin:0 auto}
+.footer-top{display:flex;flex-wrap:wrap;gap:3rem;justify-content:space-between;align-items:flex-start;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:3rem}
+.footer-brand .footer-logo{font-family:'Fredoka One',cursive;font-size:2.6rem;color:var(--blue);margin-bottom:.3rem}
+.footer-brand p{font-size:.78rem;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase}
+.footer-flavors-col h4,.footer-socials h4{font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem;font-weight:900}
+.footer-flavor-list{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.footer-flavor-list a{font-size:.85rem;color:rgba(255,255,255,.4);text-decoration:none;cursor:none;transition:color .2s;font-weight:600}
+.footer-flavor-list a:hover{color:#fff}
+.footer-social-links{display:flex;gap:.75rem}
+.soc-btn{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;text-decoration:none;cursor:none;color:rgba(255,255,255,.45);transition:border-color .25s,background .25s,transform .2s,color .2s;background:rgba(255,255,255,.03)}
+.soc-btn:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.09);transform:scale(1.14);color:#fff}
+.footer-bottom{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between}
+.footer-tags-row{display:flex;flex-wrap:wrap;gap:.5rem}
+.ftag{padding:.4rem 1.2rem;border-radius:50px;font-size:.78rem;font-weight:700;border:1px solid;cursor:none}
+.footer-copy-line{font-size:.74rem;color:rgba(255,255,255,.18);letter-spacing:.5px}
+.footer-hb{font-size:.7rem;color:rgba(255,255,255,.15);letter-spacing:1px}
+
+/* RESPONSIVE */
+@media(max-width:760px){
+  .fsec-card,.fsec:nth-child(even) .fsec-card{flex-direction:column;gap:2rem;align-items:center}
+  .finfo{text-align:center;max-width:100%}
+  .ing-row,.fstats,.hero-ctas,.mood-words,.combo-pickers,.res-btns{justify-content:center}
+  nav{padding:1rem 1.5rem}
+  .nav-links li:not(:last-child){display:none}
+  .cup-pour-outer{flex:0 0 220px!important;height:300px!important}
+  #flavor-ticker{display:none}
+  #order-bar{padding:.8rem 1.2rem}
+  .footer-top{flex-direction:column;gap:2rem}
+  .stats-inner{gap:2rem 3rem}
+  .formula-label{width:72px}
+  .lab-tubes-grid{gap:1.1rem}
+  .tube-col{width:60px}
+  .pop-bar-wrap{display:none}
+  .drawer-flavors{gap:.5rem}
+  .combo-pickers{gap:1rem}
+  .combo-picker{min-width:180px}
+  .combo-select{min-width:160px}
+}
+</style>
+</head>
+<body>
+
+<div id="intro">
+  <svg class="intro-cup" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="ig" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#FF9040"/><stop offset="100%" stop-color="#CC2000"/></radialGradient>
+      <clipPath id="ic"><polygon points="12,32 88,32 78,120 22,120"/></clipPath>
+    </defs>
+    <polygon points="12,32 88,32 78,120 22,120" fill="rgba(91,184,245,.12)" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+    <polygon points="12,72 88,72 78,120 22,120" fill="url(#ig)" clip-path="url(#ic)"/>
+    <ellipse cx="50" cy="34" rx="39" ry="17" fill="#FF7030" opacity=".95"/>
+    <ellipse cx="50" cy="28" rx="32" ry="11" fill="#FF9040" opacity=".8"/>
+    <rect x="62" y="0" width="6" height="50" rx="3" fill="#5BB8F5" transform="rotate(8,62,34)"/>
+    <ellipse cx="50" cy="33" rx="39" ry="6" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1"/>
+  </svg>
+  <div style="font-family:'Fredoka One',cursive;font-size:2rem;color:#fff;letter-spacing:1px">SlushLab</div>
+  <div class="intro-fill" id="introFill"></div>
+  <div class="intro-label">Loading flavors...</div>
+</div>
+
+<div id="cursor">
+  <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" fill="none">
+    <defs><radialGradient id="cg1" cx="40%" cy="30%" r="65%"><stop offset="0%" stop-color="#FF9040"/><stop offset="100%" stop-color="#CC2000"/></radialGradient></defs>
+    <polygon points="5,11 31,11 28,31 8,31" fill="rgba(91,184,245,.15)" stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+    <polygon points="5,20 31,20 28,31 8,31" fill="url(#cg1)" opacity=".9"/>
+    <ellipse cx="18" cy="12" rx="14" ry="6" fill="#FF7030" opacity=".95"/>
+    <rect x="22" y="1" width="2.5" height="16" rx="1.25" fill="#5BB8F5" transform="rotate(8,22,12)"/>
+    <ellipse cx="18" cy="11.5" rx="14" ry="2.5" fill="none" stroke="rgba(255,255,255,.5)" stroke-width=".8"/>
+  </svg>
+</div>
+<div id="cursor-ring"></div>
+<div id="scroll-bar"></div>
+<div id="cursor-glow"></div>
+<div id="flavor-ticker"></div>
+
+<nav id="nav">
+  <a href="#" class="nav-logo">SlushLab</a>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#flavors">Flavors</a></li>
+    <li><a href="#combo-section">Mixer</a></li>
+    <li><a href="#lab-section">The Lab</a></li>
+    <li><a href="#branches-section">Branches</a></li>
+    <li>
+      <button id="sound-btn" onclick="toggleSound()">
+        <span class="sound-icon">&#128263;</span>
+        <span id="sound-label">Sound Off</span>
+      </button>
+    </li>
+  </ul>
+  <div class="nav-accent" id="navAccent"></div>
+</nav>
+
+<div class="flavor-dots" id="dots"></div>
+
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="crystals" id="crystals"></div>
+  <div class="hero-content">
+    <p class="hero-tag">&#10052; Premium Slush Experience</p>
+    <svg class="hero-logo-svg" viewBox="0 0 460 260" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="hcup" cx="40%" cy="30%" r="65%"><stop offset="0%" stop-color="#FF8030"/><stop offset="50%" stop-color="#FF3000"/><stop offset="100%" stop-color="#AA1000"/></radialGradient>
+        <radialGradient id="hslush" cx="50%" cy="20%" r="70%"><stop offset="0%" stop-color="#FF9040"/><stop offset="100%" stop-color="#CC2000"/></radialGradient>
+        <clipPath id="hclip"><polygon points="148,55 212,55 200,155 160,155"/></clipPath>
+      </defs>
+      <ellipse cx="135" cy="40" rx="7" ry="4" fill="#5BB8F5" opacity=".8" transform="rotate(-25,135,40)"/>
+      <ellipse cx="225" cy="28" rx="6" ry="3" fill="#5BB8F5" opacity=".7" transform="rotate(15,225,28)"/>
+      <circle cx="124" cy="26" r="4" fill="#5BB8F5" opacity=".6"/>
+      <circle cx="235" cy="42" r="3" fill="#5BB8F5" opacity=".6"/>
+      <polygon points="148,55 212,55 200,155 160,155" fill="rgba(91,184,245,.12)" stroke="rgba(255,255,255,.3)" stroke-width="2"/>
+      <polygon points="148,100 212,100 200,155 160,155" fill="url(#hcup)" clip-path="url(#hclip)"/>
+      <polygon points="148,75 212,75 205,95 152,100" fill="#FF8000" opacity=".7" clip-path="url(#hclip)"/>
+      <ellipse cx="180" cy="57" rx="65" ry="28" fill="url(#hslush)"/>
+      <ellipse cx="180" cy="50" rx="55" ry="19" fill="#FF9040" opacity=".6"/>
+      <ellipse cx="162" cy="44" rx="18" ry="11" fill="#FFAA60" opacity=".5"/>
+      <ellipse cx="180" cy="57" rx="65" ry="11" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+      <rect x="197" y="0" width="9" height="100" rx="4.5" fill="#5BB8F5" transform="rotate(8,197,60)"/>
+      <rect x="197" y="0" width="4.5" height="100" rx="2" fill="rgba(255,255,255,.35)" transform="rotate(8,197,60)"/>
+      <ellipse cx="180" cy="150" rx="55" ry="12" fill="none" stroke="rgba(91,184,245,.6)" stroke-width="1.5"/>
+      <text x="0" y="210" font-family="'Fredoka One',cursive" font-size="98" fill="#fff" letter-spacing="2">SlushLab</text>
+      <text x="230" y="248" font-family="'Nunito',sans-serif" font-size="22" font-weight="900" fill="#5BB8F5" letter-spacing="4" text-anchor="middle">BEAT THE HEAT</text>
+    </svg>
+    <p class="hero-sub">9 hand-crafted slush flavors.</p>
+    <p class="hero-count">Scroll to explore each one &#8595;</p>
+    <div class="hero-ctas">
+      <a href="#flavors" class="btn-p">Explore Flavors</a>
+      <a href="#combo-section" class="btn-g">Mix Flavors</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <svg width="18" height="28" viewBox="0 0 18 28">
+      <rect x="5" y="2" width="8" height="18" rx="4" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+      <circle cx="9" cy="8" r="2.2" fill="rgba(255,255,255,.5)">
+        <animate attributeName="cy" values="8;16;8" dur="1.6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.6s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
+</section>
+
+<div class="marquee-wrap"><div class="marquee-track" id="marqueeTrack"></div></div>
+<div id="todays-special"></div>
+
+
+<div id="flavors"></div>
+
+<section id="combo-section">
+  <div class="combo-bg"></div>
+  <div class="combo-header">
+    <div class="combo-eyebrow">&#129514; Flavor Science</div>
+    <h2 class="combo-title">Combo Mixer</h2>
+    <p class="combo-sub">Pick two flavors and see what the lab creates</p>
+  </div>
+  <div class="combo-inner">
+    <div class="combo-pickers">
+      <div class="combo-picker">
+        <span class="combo-picker-label">First Flavor</span>
+        <div class="combo-trigger" id="combo1Trigger" onclick="toggleDrop(1)">
+          <div class="combo-trigger-dot" id="combo1Dot"></div>
+          <div class="combo-trigger-name" id="combo1Name">Dark Pulse</div>
+          <span class="combo-trigger-chevron">&#9660;</span>
+        </div>
+        <div class="combo-dropdown" id="combo1Drop"></div>
+      </div>
+      <div class="combo-plus" id="comboPlusSign">&#43;</div>
+      <div class="combo-picker">
+        <span class="combo-picker-label">Second Flavor</span>
+        <div class="combo-trigger" id="combo2Trigger" onclick="toggleDrop(2)">
+          <div class="combo-trigger-dot" id="combo2Dot"></div>
+          <div class="combo-trigger-name" id="combo2Name">Blueberry Breeze</div>
+          <span class="combo-trigger-chevron">&#9660;</span>
+        </div>
+        <div class="combo-dropdown" id="combo2Drop"></div>
+      </div>
+    </div>
+    <button class="combo-mix-btn" onclick="blendFlavors()">&#9881; Mix It</button>
+    <div class="combo-canvas-wrap" id="comboCanvasWrap">
+      <canvas id="comboCanvas" width="220" height="220"></canvas>
+    </div>
+    <div class="combo-result-card" id="comboResultCard">
+      <div class="combo-result-eq" id="comboEq"></div>
+      <div class="combo-result-name" id="comboName"></div>
+      <p class="combo-result-desc" id="comboDesc"></p>
+      <button class="combo-wa-btn" onclick="orderCombo()">&#128172; Order This Combo</button>
+    </div>
+  </div>
+</section>
+
+<section id="popularity-section">
+  <div class="pop-bg"></div>
+  <div class="pop-header">
+    <div class="pop-eyebrow">&#128293; This Week</div>
+    <h2 class="pop-title">Most Ordered</h2>
+    <p class="pop-sub">Updated weekly by our lab team</p>
+  </div>
+  <div class="pop-list" id="popularityList"></div>
+</section>
+
+<div id="lab-section">
+  <div class="lab-grid-bg"></div>
+  <div class="lab-header">
+    <div class="lab-eyebrow">&#9883; SlushLab Research Division</div>
+    <h2 class="lab-title">The Lab</h2>
+    <div class="lab-subtitle">Flavor Analysis &mdash; Batch 9.1</div>
+  </div>
+  <div class="lab-tubes-grid" id="labTubes"></div>
+</div>
+
+<section id="branches-section">
+  <div class="branches-bg"></div>
+  <div class="branches-grid-lines"></div>
+  <div class="branches-header">
+    <div class="branches-eyebrow">&#10052; Find Us</div>
+    <h2 class="branches-title">Our Branches</h2>
+    <p class="branches-sub">Pick up your slush fresh from the lab</p>
+  </div>
+  <div class="branches-grid" id="branchesGrid"></div>
+</section>
+
+<section id="quiz-section">
+  <div class="quiz-bg"></div>
+  <div class="quiz-header">
+    <div class="quiz-eyebrow">&#129514; 30-Second Quiz</div>
+    <h2 class="quiz-title">Which Flavor are you?</h2>
+    <p class="quiz-sub">Answer 3 quick questions and we find your perfect slush match</p>
+  </div>
+  <div class="quiz-card">
+    <div class="quiz-progress" id="quizProgress"><div class="qpip"></div><div class="qpip"></div><div class="qpip"></div></div>
+    <div id="quizSteps"></div>
+    <div class="quiz-result" id="quizResult">
+      <div class="res-emoji" id="resEmoji"></div>
+      <div class="res-name" id="resName"></div>
+      <p class="res-desc" id="resDesc"></p>
+      <div class="res-btns">
+        <button class="res-retry" onclick="resetQuiz()">Try Again</button>
+        <button class="res-go" id="resGo" onclick="goToFlavor()">See My Flavor &#8594;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="footer">
+  <div class="footer-glow"></div>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">SlushLab</div>
+        <p>Beat the Heat</p>
+      </div>
+      <div class="footer-flavors-col">
+        <h4>All Flavors</h4>
+        <ul class="footer-flavor-list" id="footerFlavorList"></ul>
+      </div>
+      <div class="footer-socials">
+        <h4>Find Us</h4>
+        <div class="footer-social-links">
+          <a class="soc-btn" href="#" title="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a class="soc-btn" href="#" title="WhatsApp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.93 11.93 0 0012.01 0C5.38 0 .01 5.37.01 12c0 2.12.55 4.18 1.6 6L0 24l6.19-1.62A11.97 11.97 0 0012 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.21-3.48-8.52zM12 21.9a9.87 9.87 0 01-5.03-1.38l-.36-.21-3.73.98 1-3.63-.24-.38A9.86 9.86 0 012.1 12C2.1 6.53 6.53 2.1 12 2.1c2.63 0 5.1 1.02 6.96 2.88A9.79 9.79 0 0121.9 12c0 5.47-4.43 9.9-9.9 9.9zm5.44-7.4c-.3-.15-1.76-.87-2.03-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.6.13-.13.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.2c-.19 0-.5.07-.77.37-.26.3-1 .98-1 2.38s1.03 2.76 1.17 2.95c.15.2 2.02 3.08 4.89 4.32.68.3 1.22.47 1.63.6.69.22 1.31.19 1.81.12.55-.08 1.76-.72 2-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.19-.57-.34z"/></svg>
+          </a>
+          <a class="soc-btn" href="#" title="TikTok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.2 8.2 0 004.79 1.53V6.77a4.85 4.85 0 01-1.02-.08z"/></svg>
+          </a>
+          <a class="soc-btn" href="#" title="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.49h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-tags-row" id="fgrid"></div>
+      <div>
+        <div class="footer-copy-line">&#169; 2025 SlushLab &mdash; All flavors, all day.</div>
+        <div class="footer-hb">Crafted with &#10052; in the lab.</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="order-bar">
+  <div><div id="order-bar-label">Now Viewing</div><div id="order-bar-name">Dark Pulse</div></div>
+  <button id="order-btn" onclick="openOrderDrawer()">&#128172; Order Now</button>
+</div>
+
+<div id="drawer-overlay" onclick="closeOrderDrawer()"></div>
+<div id="order-drawer">
+  <button class="drawer-close" onclick="closeOrderDrawer()">&#10005;</button>
+  <div class="drawer-handle"></div>
+  <div class="drawer-title" id="drawerTitle">Order Your Slush</div>
+  <div class="drawer-sub">Fresh from the lab</div>
+  <div class="drawer-section">
+    <div class="drawer-label">Choose Flavor</div>
+    <div class="drawer-flavors" id="drawerFlavors"></div>
+  </div>
+  <div class="drawer-section">
+    <div class="drawer-label">Choose Size</div>
+    <div class="drawer-sizes">
+      <button class="drawer-size-btn sel" id="sizeSmall" onclick="selectSize('Small')">Small</button>
+      <button class="drawer-size-btn" id="sizeLarge" onclick="selectSize('Large')">Large</button>
+    </div>
+  </div>
+  <div class="drawer-section">
+    <div class="drawer-label">Quantity</div>
+    <div class="drawer-qty-row">
+      <button class="qty-btn" onclick="changeQty(-1)">&#8722;</button>
+      <div id="qtyDisplay">1</div>
+      <button class="qty-btn" onclick="changeQty(1)">&#43;</button>
+    </div>
+  </div>
+  <button class="drawer-wa-btn" id="drawerSendBtn" onclick="sendWhatsAppOrder()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.93 11.93 0 0012.01 0C5.38 0 .01 5.37.01 12c0 2.12.55 4.18 1.6 6L0 24l6.19-1.62A11.97 11.97 0 0012 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.21-3.48-8.52zM12 21.9a9.87 9.87 0 01-5.03-1.38l-.36-.21-3.73.98 1-3.63-.24-.38A9.86 9.86 0 012.1 12C2.1 6.53 6.53 2.1 12 2.1c2.63 0 5.1 1.02 6.96 2.88A9.79 9.79 0 0121.9 12c0 5.47-4.43 9.9-9.9 9.9zm5.44-7.4c-.3-.15-1.76-.87-2.03-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.6.13-.13.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.2c-.19 0-.5.07-.77.37-.26.3-1 .98-1 2.38s1.03 2.76 1.17 2.95c.15.2 2.02 3.08 4.89 4.32.68.3 1.22.47 1.63.6.69.22 1.31.19 1.81.12.55-.08 1.76-.72 2-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.19-.57-.34z"/></svg>
+    Send Order on WhatsApp
+  </button>
+</div>
+
+<button id="back-top" onclick="backToTop()" title="Back to top">
+  <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" fill="none" width="28" height="28">
+    <defs><radialGradient id="btg" cx="40%" cy="30%" r="65%"><stop offset="0%" stop-color="#FF9040"/><stop offset="100%" stop-color="#CC2000"/></radialGradient></defs>
+    <polygon points="5,13 31,13 28,29 8,29" fill="rgba(91,184,245,.2)" stroke="rgba(255,255,255,.35)" stroke-width="1"/>
+    <polygon points="5,21 31,21 28,29 8,29" fill="url(#btg)" opacity=".9"/>
+    <ellipse cx="18" cy="14" rx="13" ry="5.5" fill="#FF7030" opacity=".95"/>
+    <rect x="21" y="3" width="2.5" height="14" rx="1.25" fill="#5BB8F5" transform="rotate(7,21,14)"/>
+    <path d="M11 8 L18 2 L25 8" stroke="rgba(255,255,255,.7)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<script>
+var F = [
+  {
+    name: "Dark Pulse", premium: true, isNew: false,
+    chemName: "Nx&#8322;-Pulse&#183;X9",
+    moodWords: ["Electric","Midnight","Fierce"],
+    texture: "Velvety Crush",
+    palette: ["#0D0020","#3B0070","#9B3FE8","#C87AFF","#EDD5FF"],
+    formula: { sweetness: 62, chill: 88, tingle: 95, intensity: 98 },
+    tubeLevel: 88,
+    emoji: "⚡", mood: "Mysterious", intensity: "Intense", vibe: "Night Vibes",
+    color: "#9B3FE8", glow: "rgba(155,63,232,.3)", dim: "rgba(155,63,232,.1)", border: "rgba(155,63,232,.3)",
+    bg: "rgba(40,5,80,.5)", shadow: "rgba(120,30,220,.4)",
+    top: "#B060F8", fill: "#6B15B8", acc: "#D090FF",
+    desc: "An electrifying dark-berry blend that pulses with intense flavour. Bold, mysterious, utterly addictive.",
+    tags: ["Dark Berry","Intense","Bold"]
+  },
+  {
+    name: "Blueberry Breeze", premium: false, isNew: false,
+    chemName: "CryO-Blu&#8322;",
+    moodWords: ["Serene","Coastal","Calm"],
+    texture: "Silky Wave",
+    palette: ["#001240","#0A3080","#2E9BFF","#80C8FF","#D0EAFF"],
+    formula: { sweetness: 72, chill: 95, tingle: 45, intensity: 58 },
+    tubeLevel: 70,
+    emoji: "💙", mood: "Breezy", intensity: "Mild", vibe: "Ocean Cool",
+    color: "#2E9BFF", glow: "rgba(46,155,255,.28)", dim: "rgba(46,155,255,.1)", border: "rgba(46,155,255,.3)",
+    bg: "rgba(8,28,80,.5)", shadow: "rgba(30,100,230,.4)",
+    top: "#60BBFF", fill: "#1260D0", acc: "#90D0FF",
+    desc: "Crisp, cool blueberry that sweeps through like an ocean breeze. Refreshing natural berry sweetness in every sip.",
+    tags: ["Fresh","Berry","Refreshing"]
+  },
+  {
+    name: "Strawberry Splash", premium: false, isNew: true,
+    chemName: "RxO&#8322;-Straw",
+    moodWords: ["Vivid","Playful","Sweet"],
+    texture: "Juicy Burst",
+    palette: ["#3A000F","#880025","#F52060","#FF7AAA","#FFD0DF"],
+    formula: { sweetness: 88, chill: 70, tingle: 52, intensity: 65 },
+    tubeLevel: 75,
+    emoji: "🍓", mood: "Classic", intensity: "Medium", vibe: "Summer Day",
+    color: "#F52060", glow: "rgba(245,32,96,.28)", dim: "rgba(245,32,96,.1)", border: "rgba(245,32,96,.3)",
+    bg: "rgba(70,5,25,.5)", shadow: "rgba(220,10,50,.4)",
+    top: "#FF5085", fill: "#BB0830", acc: "#FF90B0",
+    desc: "Sun-ripened strawberry bursting with vivid red sweetness. A classic fan-favourite that never disappoints.",
+    tags: ["Classic","Sweet","Fruity"]
+  },
+  {
+    name: "Orange Octane", premium: false, isNew: false,
+    chemName: "OctO&#8323;-Cit",
+    moodWords: ["Explosive","Zesty","Charged"],
+    texture: "Citrus Crunch",
+    palette: ["#2A0A00","#7A2000","#FF5500","#FF9055","#FFD8C0"],
+    formula: { sweetness: 65, chill: 60, tingle: 88, intensity: 82 },
+    tubeLevel: 68,
+    emoji: "🍊", mood: "Energetic", intensity: "Bold", vibe: "High Speed",
+    color: "#FF5500", glow: "rgba(255,85,0,.28)", dim: "rgba(255,85,0,.1)", border: "rgba(255,85,0,.3)",
+    bg: "rgba(70,22,0,.5)", shadow: "rgba(230,60,0,.4)",
+    top: "#FF8840", fill: "#CC3200", acc: "#FFBB70",
+    desc: "High-octane citrus explosion that hits different. Bold orange with a tangy afterburn that fuels your summer.",
+    tags: ["Citrus","Tangy","Bold"]
+  },
+  {
+    name: "Pineapple Punch", premium: false, isNew: false,
+    chemName: "H&#8322;-Pin&#8323;a",
+    moodWords: ["Tropical","Bright","Punchy"],
+    texture: "Fibrous Zing",
+    palette: ["#1A1400","#504000","#F5C200","#FFDE60","#FFF5C0"],
+    formula: { sweetness: 85, chill: 75, tingle: 78, intensity: 72 },
+    tubeLevel: 72,
+    emoji: "🍍", mood: "Tropical", intensity: "Punchy", vibe: "Island Life",
+    color: "#F5C200", glow: "rgba(245,194,0,.28)", dim: "rgba(245,194,0,.1)", border: "rgba(245,194,0,.3)",
+    bg: "rgba(55,40,0,.5)", shadow: "rgba(210,160,0,.4)",
+    top: "#FFE040", fill: "#C89000", acc: "#FFF080",
+    desc: "Tropical pineapple that punches your taste buds straight to paradise. Sweet, tangy, and totally irresistible.",
+    tags: ["Tropical","Sweet","Tangy"]
+  },
+  {
+    name: "Peach Paradise", premium: false, isNew: false,
+    chemName: "SolO-Peach&#178;",
+    moodWords: ["Dreamy","Golden","Lush"],
+    texture: "Soft Cloud",
+    palette: ["#2A1200","#783000","#FF8C42","#FFBB88","#FFE8D5"],
+    formula: { sweetness: 90, chill: 80, tingle: 35, intensity: 48 },
+    tubeLevel: 65,
+    emoji: "🍑", mood: "Dreamy", intensity: "Gentle", vibe: "Sunset Glow",
+    color: "#FF8C42", glow: "rgba(255,140,66,.28)", dim: "rgba(255,140,66,.1)", border: "rgba(255,140,66,.3)",
+    bg: "rgba(65,28,0,.5)", shadow: "rgba(220,90,10,.4)",
+    top: "#FFB870", fill: "#D05A10", acc: "#FFD8AA",
+    desc: "Soft, velvety peach that transports you to paradise. Gentle sweetness with a lush, dreamy finish.",
+    tags: ["Soft","Dreamy","Peachy"]
+  },
+  {
+    name: "Green Apple Gush", premium: false, isNew: true,
+    chemName: "Grn&#8322;-Apple",
+    moodWords: ["Sharp","Fresh","Bold"],
+    texture: "Crisp Snap",
+    palette: ["#031200","#0F3800","#4CBF24","#8AE060","#D0F5B0"],
+    formula: { sweetness: 55, chill: 72, tingle: 92, intensity: 70 },
+    tubeLevel: 78,
+    emoji: "🍏", mood: "Zingy", intensity: "Tart", vibe: "Fresh Start",
+    color: "#4CBF24", glow: "rgba(76,191,36,.28)", dim: "rgba(76,191,36,.1)", border: "rgba(76,191,36,.3)",
+    bg: "rgba(8,45,5,.5)", shadow: "rgba(40,160,10,.4)",
+    top: "#80E040", fill: "#229010", acc: "#B8FF70",
+    desc: "Crisp green apple with a tartness that gushes through. Zingy, lively, and dangerously refreshing on a hot day.",
+    tags: ["Tart","Crisp","Zingy"]
+  },
+  {
+    name: "Mango Magic", premium: false, isNew: false,
+    chemName: "H&#8322;-Mango&#183;Au",
+    moodWords: ["Ripe","Warm","Exotic"],
+    texture: "Thick Velvet",
+    palette: ["#201000","#6A3C00","#FFB300","#FFD060","#FFF0C0"],
+    formula: { sweetness: 92, chill: 68, tingle: 55, intensity: 75 },
+    tubeLevel: 80,
+    emoji: "🥭", mood: "Luscious", intensity: "Rich", vibe: "Golden Hour",
+    color: "#FFB300", glow: "rgba(255,179,0,.28)", dim: "rgba(255,179,0,.1)", border: "rgba(255,179,0,.3)",
+    bg: "rgba(65,38,0,.5)", shadow: "rgba(220,130,0,.4)",
+    top: "#FFD050", fill: "#D07800", acc: "#FFE880",
+    desc: "Pure tropical mango magic in a cup. Luscious, ripe, golden goodness — the very taste of summer.",
+    tags: ["Tropical","Luscious","Golden"]
+  },
+  {
+    name: "Grape Glacier", premium: false, isNew: false,
+    chemName: "CryO-Grape&#8325;",
+    moodWords: ["Deep","Frosty","Velvet"],
+    texture: "Icy Depth",
+    palette: ["#0E0025","#350075","#7B30C8","#B070E8","#E0C8FF"],
+    formula: { sweetness: 68, chill: 98, tingle: 62, intensity: 80 },
+    tubeLevel: 73,
+    emoji: "🍇", mood: "Icy", intensity: "Deep", vibe: "Frozen Peaks",
+    color: "#7B30C8", glow: "rgba(123,48,200,.28)", dim: "rgba(123,48,200,.1)", border: "rgba(123,48,200,.3)",
+    bg: "rgba(28,5,65,.5)", shadow: "rgba(90,20,180,.4)",
+    top: "#A060E8", fill: "#4C10A0", acc: "#C898FF",
+    desc: "Deep, icy grape coolness that hits like a glacier. Rich, velvety grape layered over perfectly crushed ice.",
+    tags: ["Deep","Icy","Rich"]
+  }
+];
+
+var BRANCHES = [
+  {
+    name:    "Hayatabad",
+    tag:     "Main Branch",
+    address: "Phase 4, Sector F, Street 12\nHayatabad, Peshawar",
+    hours:   "12:00 PM – 12:00 AM",
+    status:  "open",
+    mapUrl:  "#"
+  },
+  {
+    name:    "University Town",
+    tag:     "Branch",
+    address: "Main University Road\nUniversity Town, Peshawar",
+    hours:   "12:00 PM – 12:00 AM",
+    status:  "open",
+    mapUrl:  "#"
+  },
+  {
+    name:    "Saddar",
+    tag:     "Branch",
+    address: "Saddar Bazaar\nSaddar, Peshawar",
+    hours:   "12:00 PM – 11:00 PM",
+    status:  "open",
+    mapUrl:  "#"
+  }
+  /* Add more branches:
+  ,{
+    name:    "Your City",
+    tag:     "Branch",
+    address: "Street, Area\nCity",
+    hours:   "Hours",
+    status:  "open",   // or "opening"
+    mapUrl:  "https://maps.google.com/?q=..."
+  }
+  */
+];
+
+
+/* ── POPULARITY DATA (edit percentages freely) ── */
+var POPULARITY = [
+  { idx: 7, pct: 96 },
+  { idx: 0, pct: 91 },
+  { idx: 2, pct: 85 },
+  { idx: 3, pct: 78 },
+  { idx: 4, pct: 72 },
+  { idx: 6, pct: 65 },
+  { idx: 8, pct: 60 },
+  { idx: 1, pct: 54 },
+  { idx: 5, pct: 48 }
+];
+
+/* ── TODAYS SPECIAL (Sun=0..Sat=6) ── */
+var DOW_FLAVOR = [2, 0, 3, 7, 4, 8, 1]; // Sun Mon Tue Wed Thu Fri Sat
+
+/* ── COMBO NAME GENERATOR ── */
+var COMBO_ADJ = ["Cosmic","Frozen","Electric","Neon","Arctic","Velvet","Crystal","Hyper","Blazing","Shadow"];
+var COMBO_NOUN = ["Storm","Wave","Rush","Dream","Surge","Pulse","Drift","Burst","Echo","Fusion"];
+
+/* ── AUDIO ENGINE ── */
+var audioCtx = null, soundOn = false, prevIdx = -1;
+function getCtx(){ if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function playFizzCrunch(color){
+  if(!soundOn) return;
+  var ctx=getCtx(),now=ctx.currentTime;
+  var bl=ctx.sampleRate*.18,buf=ctx.createBuffer(1,bl,ctx.sampleRate),d=buf.getChannelData(0);
+  for(var i=0;i<bl;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/bl,2.5);
+  var ns=ctx.createBufferSource(); ns.buffer=buf;
+  var bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=2400; bp.Q.value=.8;
+  var gn=ctx.createGain(); gn.gain.setValueAtTime(0,now); gn.gain.linearRampToValueAtTime(.22,now+.01); gn.gain.exponentialRampToValueAtTime(.001,now+.18);
+  ns.connect(bp); bp.connect(gn); gn.connect(ctx.destination); ns.start(now); ns.stop(now+.2);
+  var r=parseInt(color.slice(1,3),16),g=parseInt(color.slice(3,5),16),b=parseInt(color.slice(5,7),16);
+  var freq=300+(r*.5+g*.8+b*.3)%400;
+  var osc=ctx.createOscillator(); osc.type='sine'; osc.frequency.setValueAtTime(freq,now); osc.frequency.exponentialRampToValueAtTime(freq*.7,now+.35);
+  var og=ctx.createGain(); og.gain.setValueAtTime(0,now); og.gain.linearRampToValueAtTime(.12,now+.02); og.gain.exponentialRampToValueAtTime(.001,now+.35);
+  osc.connect(og); og.connect(ctx.destination); osc.start(now); osc.stop(now+.4);
+}
+function playWhoosh(){
+  if(!soundOn) return;
+  var ctx=getCtx(),now=ctx.currentTime;
+  var bl=ctx.sampleRate*.28,buf=ctx.createBuffer(1,bl,ctx.sampleRate),d=buf.getChannelData(0);
+  for(var i=0;i<bl;i++) d[i]=(Math.random()*2-1)*Math.sin(Math.PI*i/bl);
+  var ns=ctx.createBufferSource(); ns.buffer=buf;
+  var lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.setValueAtTime(800,now); lp.frequency.linearRampToValueAtTime(200,now+.28);
+  var gn=ctx.createGain(); gn.gain.setValueAtTime(0,now); gn.gain.linearRampToValueAtTime(.09,now+.06); gn.gain.exponentialRampToValueAtTime(.001,now+.28);
+  ns.connect(lp); lp.connect(gn); gn.connect(ctx.destination); ns.start(now); ns.stop(now+.3);
+}
+function playToggle(on){
+  if(!audioCtx&&!on) return;
+  var ctx=getCtx(),now=ctx.currentTime;
+  var osc=ctx.createOscillator(); osc.type='sine'; osc.frequency.setValueAtTime(on?660:330,now); osc.frequency.exponentialRampToValueAtTime(on?880:220,now+.08);
+  var gn=ctx.createGain(); gn.gain.setValueAtTime(.1,now); gn.gain.exponentialRampToValueAtTime(.001,now+.1);
+  osc.connect(gn); gn.connect(ctx.destination); osc.start(now); osc.stop(now+.12);
+}
+function toggleSound(){
+  soundOn=!soundOn;
+  var btn=document.getElementById('sound-btn');
+  btn.querySelector('.sound-icon').innerHTML=soundOn?'&#128266;':'&#128263;';
+  document.getElementById('sound-label').textContent=soundOn?'Sound On':'Sound Off';
+  btn.classList.toggle('on',soundOn);
+  playToggle(soundOn);
+}
+
+/* ── CUP SVG ── */
+function cupSVG(f,i){
+  return '<svg viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">'
+  +'<defs><clipPath id="cc'+i+'"><polygon points="28,72 212,72 188,298 52,298"/></clipPath>'
+  +'<radialGradient id="sg'+i+'" cx="50%" cy="25%" r="75%"><stop offset="0%" stop-color="'+f.acc+'"/><stop offset="55%" stop-color="'+f.fill+'"/><stop offset="100%" stop-color="'+f.fill+'" stop-opacity=".85"/></radialGradient>'
+  +'<radialGradient id="topg'+i+'" cx="40%" cy="35%" r="65%"><stop offset="0%" stop-color="'+f.acc+'" stop-opacity=".9"/><stop offset="100%" stop-color="'+f.top+'" stop-opacity=".7"/></radialGradient></defs>'
+  +'<polygon points="28,72 212,72 188,298 52,298" fill="rgba(200,235,255,.07)" clip-path="url(#cc'+i+')"/>'
+  +'<polygon points="28,148 212,148 188,298 52,298" fill="url(#sg'+i+')" clip-path="url(#cc'+i+')"/>'
+  +'<path d="M28,148 Q70,132 120,148 Q170,164 212,148 L212,162 Q168,178 120,162 Q72,146 28,162Z" fill="'+f.top+'" clip-path="url(#cc'+i+')"/>'
+  +'<polygon points="28,72 212,72 188,298 52,298" fill="none" stroke="rgba(255,255,255,.32)" stroke-width="2"/>'
+  +'<polygon points="33,80 58,80 44,284 30,284" fill="rgba(255,255,255,.09)" clip-path="url(#cc'+i+')"/>'
+  +'<ellipse cx="120" cy="76" rx="93" ry="40" fill="'+f.top+'" opacity=".92"/>'
+  +'<ellipse cx="120" cy="67" rx="78" ry="27" fill="url(#topg'+i+')" opacity=".85"/>'
+  +'<ellipse cx="94" cy="60" rx="24" ry="14" fill="'+f.acc+'" opacity=".55"/>'
+  +'<ellipse cx="145" cy="56" rx="20" ry="13" fill="'+f.acc+'" opacity=".45"/>'
+  +'<ellipse cx="120" cy="49" rx="16" ry="10" fill="rgba(255,255,255,.45)" opacity=".5"/>'
+  +'<ellipse cx="55" cy="55" rx="9" ry="5" fill="'+f.color+'" opacity=".65" transform="rotate(-22,55,55)"/>'
+  +'<ellipse cx="182" cy="43" rx="7" ry="4" fill="'+f.color+'" opacity=".55" transform="rotate(18,182,43)"/>'
+  +'<circle cx="40" cy="38" r="5" fill="'+f.color+'" opacity=".5"/>'
+  +'<circle cx="198" cy="35" r="4" fill="'+f.color+'" opacity=".45"/>'
+  +'<rect x="150" y="-5" width="11" height="118" rx="5.5" fill="#5BB8F5" transform="rotate(9,150,78)"/>'
+  +'<rect x="150" y="-5" width="5.5" height="118" rx="2.5" fill="rgba(255,255,255,.35)" transform="rotate(9,150,78)"/>'
+  +'<ellipse cx="120" cy="74" rx="93" ry="14" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/>'
+  +'<text x="120" y="210" text-anchor="middle" font-family="Fredoka One,cursive" font-size="20" fill="rgba(255,255,255,.22)" letter-spacing="1">SlushLab</text>'
+  +'<text x="120" y="230" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8" font-weight="700" fill="rgba(255,255,255,.15)" letter-spacing="2.5">BEAT THE HEAT</text>'
+  +'<ellipse cx="78" cy="178" rx="3" ry="5.5" fill="rgba(255,255,255,.14)"/>'
+  +'<ellipse cx="165" cy="204" rx="2.5" ry="4.5" fill="rgba(255,255,255,.11)"/>'
+  +'<ellipse cx="120" cy="296" rx="68" ry="8" fill="rgba(0,0,0,.25)"/>'
+  +'</svg>';
+}
+
+/* ── BUILD FLAVOR SECTIONS ── */
+var fWrap=document.getElementById('flavors'),dotsWrap=document.getElementById('dots'),fgrid=document.getElementById('fgrid');
+for(var i=0;i<F.length;i++){
+  (function(f,idx){
+    var eo=idx%2===0, sec=document.createElement('section');
+    sec.className='fsec'; sec.id='f'+idx;
+    sec.style.setProperty('--fc',f.color); sec.style.setProperty('--fc-glow',f.glow);
+    sec.style.setProperty('--fc-dim',f.dim); sec.style.setProperty('--fc-border',f.border);
+    sec.style.setProperty('--fshadow',f.shadow);
+    var premHTML=f.premium?'<div class="premium-badge">&#9733; Premium</div>':'';
+    var newHTML=f.isNew?'<div class="ribbon-new">&#10024; New</div>':'';
+    var fowIdx=7;
+    var fowHTML=idx===fowIdx?'<div class="fow-label">Flavor of the week</div><div class="fow-crown">&#128081;</div>':'';
+    var tagsHTML=''; for(var t=0;t<f.tags.length;t++) tagsHTML+='<span class="ing-pill">'+f.tags[t]+'</span>';
+    var statsHTML='<div class="fstats"><div class="fstat"><b>'+f.mood+'</b>Mood</div><div class="fstat"><b>'+f.intensity+'</b>Intensity</div><div class="fstat"><b>'+f.vibe+'</b>Best For</div></div>';
+    var fmRows=[{label:'Sweetness',val:f.formula.sweetness},{label:'Chill Factor',val:f.formula.chill},{label:'Tingle',val:f.formula.tingle},{label:'Intensity',val:f.formula.intensity}];
+    var fmHTML='<div class="formula-card"><div class="formula-header">&#9879; Flavor Formula</div>';
+    for(var r=0;r<fmRows.length;r++) fmHTML+='<div class="formula-row"><span class="formula-label">'+fmRows[r].label+'</span><div class="formula-bar-track"><div class="formula-fill" style="--fw:'+fmRows[r].val+'%"></div></div><span class="formula-val">'+fmRows[r].val+'%</span></div>';
+    fmHTML+='</div>';
+    var swatchHTML=''; for(var s=0;s<f.palette.length;s++) swatchHTML+='<div class="mood-swatch" style="background:'+f.palette[s]+'"></div>';
+    var mwHTML=''; for(var w=0;w<f.moodWords.length;w++){if(w>0)mwHTML+='<span class="mood-word-sep">&#183;</span>';mwHTML+='<span class="mood-word">'+f.moodWords[w]+'</span>';}
+    var mbHTML='<div class="moodboard"><div class="mood-header">Vibe Board</div><div class="mood-words">'+mwHTML+'</div><div class="mood-texture">Texture &mdash; '+f.texture+'</div><div class="mood-palette">'+swatchHTML+'</div></div>';
+    var num=idx<9?'0'+(idx+1):''+(idx+1);
+    var bgStyle='background:radial-gradient(ellipse 55% 55% at '+(eo?'65%':'35%')+' 50%,'+f.glow+' 0%,transparent 65%),linear-gradient(180deg,var(--navy) 0%,'+f.bg+' 50%,var(--navy) 100%)';
+    var cupInner=fowHTML+(f.isNew?newHTML:'')+'<div class="cup-wrap">'+cupSVG(f,idx)+'</div>';
+    sec.innerHTML='<div class="fsec-bg" style="'+bgStyle+'"></div><div class="aura-pulse"></div><div class="sec-watermark">'+f.name+'</div><div class="fsec-card" data-i="'+idx+'"><div class="cup-pour-outer">'+cupInner+'</div><div class="finfo"><p class="fnum">'+num+' <span style="opacity:.4">/</span> 09</p>'+premHTML+'<h2 class="fname">'+f.name+'</h2><div class="ing-row">'+tagsHTML+'</div><p class="fdesc">'+f.desc+'</p>'+statsHTML+fmHTML+mbHTML+'</div></div>';
+    for(var p=0;p<6;p++){var pt=document.createElement('div'),sz=Math.random()*14+5;pt.className='iparticle';pt.style.cssText='left:'+(Math.random()*90+5)+'%;bottom:-20px;animation-duration:'+(Math.random()*11+6)+'s;animation-delay:'+(Math.random()*9)+'s;';pt.innerHTML='<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="'+f.color+'" stroke-width="1" opacity=".55"/><path d="M8 2v12M2 8h12M4 4l8 8M12 4L4 12" stroke="'+f.color+'" stroke-width=".7" opacity=".4"/></svg>';sec.appendChild(pt);}
+    fWrap.appendChild(sec);
+    var d=document.createElement('button'); d.className='dot'; d.title=f.name; d.style.setProperty('--dot-c',f.color);
+    d.onclick=(function(id){return function(){document.getElementById('f'+id).scrollIntoView({behavior:'smooth'});};})(idx);
+    dotsWrap.appendChild(d);
+    var ft=document.createElement('span'); ft.className='ftag'; ft.textContent=f.name; ft.style.cssText='color:'+f.color+';border-color:'+f.border+';background:'+f.dim; fgrid.appendChild(ft);
+  })(F[i],i);
+}
+
+/* ── MARQUEE ── */
+(function(){
+  var track=document.getElementById('marqueeTrack'); if(!track) return;
+  for(var copy=0;copy<2;copy++){
+    for(var mi=0;mi<F.length;mi++){
+      var a=document.createElement('a'); a.className='mname'; a.href='#'; a.textContent=F[mi].name;
+      a.style.color=F[mi].color; a.style.textShadow='0 0 18px '+F[mi].glow;
+      (function(idx){a.addEventListener('click',function(e){e.preventDefault();document.getElementById('f'+idx).scrollIntoView({behavior:'smooth'});});})(mi);
+      track.appendChild(a);
+      var sep=document.createElement('span'); sep.className='msep'; sep.textContent='·'; track.appendChild(sep);
+    }
+  }
+})();
+
+/* ── TODAY'S SPECIAL ── */
+(function(){
+  var dow=new Date().getDay();
+  var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var fi=DOW_FLAVOR[dow], f=F[fi];
+  var el=document.getElementById('todays-special'); if(!el) return;
+  el.style.borderTop='1px solid '+f.border;
+  el.innerHTML='<span class="special-label">Today\'s Special</span>'
+    +'<span class="special-day">'+days[dow]+'</span>'
+    +'<span class="special-name" style="color:'+f.color+';text-shadow:0 0 20px '+f.glow+'">'+f.emoji+' '+f.name+'</span>'
+    +'<span class="special-badge" style="color:'+f.color+';background:'+f.dim+';border-color:'+f.border+'">Featured</span>'
+    +'<span class="special-arrow">&#8594;</span>';
+  el.onclick=function(){document.getElementById('f'+fi).scrollIntoView({behavior:'smooth'});};
+})();
+
+
+
+/* ── LAB TUBES ── */
+var labTubes=document.getElementById('labTubes');
+for(var li=0;li<F.length;li++){
+  (function(f,idx){
+    var fillH=Math.round((f.tubeLevel/100)*140), fillTop=160-fillH;
+    var bubblesHTML='';
+    for(var b=0;b<3;b++){
+      var bx=16+Math.random()*20, bsz=2+Math.random()*3, bdur=1.5+Math.random()*2, bdel=Math.random()*2;
+      bubblesHTML+='<circle cx="'+bx+'" cy="'+(fillTop+fillH-6)+'" r="'+bsz+'" fill="rgba(255,255,255,.4)"><animate attributeName="cy" values="'+(fillTop+fillH-6)+';'+(fillTop+4)+';'+(fillTop+fillH-6)+'" dur="'+bdur+'s" begin="'+bdel+'s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.5;0.1;0" dur="'+bdur+'s" begin="'+bdel+'s" repeatCount="indefinite"/></circle>';
+    }
+    var col=document.createElement('div'); col.className='tube-col';
+    col.innerHTML='<div class="tube-outer"><div class="tube-body"></div><div class="tube-bottom"></div><div class="tube-rim"></div>'
+      +'<svg style="position:absolute;inset:0;width:100%;height:100%;overflow:visible" viewBox="0 0 52 180">'
+      +'<defs><clipPath id="tc'+idx+'"><rect x="10" y="'+fillTop+'" width="32" height="'+(fillH+18)+'" rx="3"/></clipPath></defs>'
+      +'<rect x="10" y="'+fillTop+'" width="32" height="'+(fillH+12)+'" fill="'+f.color+'" opacity=".85" clip-path="url(#tc'+idx+')" class="tube-liquid" style="transform-origin:bottom center"/>'
+      +bubblesHTML
+      +'<rect x="12" y="'+fillTop+'" width="6" height="'+(fillH+6)+'" rx="3" fill="rgba(255,255,255,.15)" clip-path="url(#tc'+idx+')"/>'
+      +'</svg></div>'
+      +'<div class="tube-chem">'+f.chemName+'</div><div class="tube-fname">'+f.name+'</div>';
+    labTubes.appendChild(col);
+  })(F[li],li);
+}
+var labObs=new IntersectionObserver(function(e){
+  if(e[0].isIntersecting){labTubes.classList.add('animate');labTubes.querySelectorAll('.tube-liquid').forEach(function(el){el.style.transform='scaleY(1)';});}
+},{threshold:.2});
+labObs.observe(document.getElementById('lab-section'));
+
+/* ── BRANCHES + COUNTDOWN ── */
+var PIN_SVG='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+var CLOCK_SVG='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
+var ARROW_SVG='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+var PLUS_SVG='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+
+function parseTime(str){var p=str.split(':'),h=parseInt(p[0]),m=parseInt(p[1].split(' ')[0]),ampm=str.toUpperCase().indexOf('PM')>-1;if(ampm&&h!==12)h+=12;if(!ampm&&h===12)h=0;return h*60+m;}
+function formatCountdown(mins){var h=Math.floor(mins/60),m=mins%60;return h>0?h+'h '+m+'m':m+'m';}
+function getBranchCountdown(b){
+  var now=new Date(), cur=now.getHours()*60+now.getMinutes();
+  var parts=b.hours.split('\u2013');
+  if(parts.length<2) return null;
+  var openM=parseTime(parts[0].trim()), closeM=parseTime(parts[1].trim());
+  if(closeM<openM) closeM+=1440;
+  if(cur>=openM&&cur<closeM) return {open:true,mins:closeM-cur};
+  var minsToOpen=cur<openM?openM-cur:openM+1440-cur;
+  return {open:false,mins:minsToOpen};
+}
+
+var countdownEls=[];
+(function(){
+  var grid=document.getElementById('branchesGrid'); if(!grid) return;
+  for(var bi=0;bi<BRANCHES.length;bi++){
+    (function(b,idx){
+      var card=document.createElement('div'); card.className='branch-card';
+      var numStr=(idx+1)<10?'0'+(idx+1):''+(idx+1);
+      var addrFmt=b.address.replace(/\n/g,'<br>');
+      var mapHTML=b.mapUrl&&b.mapUrl!=='#'?'<button class="branch-map-btn" onclick="window.open(\''+b.mapUrl+'\',\'_blank\')">Get Directions '+ARROW_SVG+'</button>':'<button class="branch-map-btn" style="opacity:.3;pointer-events:none">Directions coming soon</button>';
+      var cdId='cd'+idx;
+      var stId='st'+idx;
+      card.innerHTML='<div class="branch-num">'+numStr+'</div><div class="branch-icon">'+PIN_SVG+'</div><div class="branch-tag">&#10052; '+b.tag+'</div><div class="branch-name">'+b.name+'</div><div class="branch-address">'+addrFmt+'</div><div class="branch-hours">'+CLOCK_SVG+' <span>'+b.hours+'</span></div><div class="branch-status-wrap" id="'+stId+'"></div>'+mapHTML;
+      grid.appendChild(card);
+      countdownEls.push({id:cdId,stId:stId,branch:b});
+    })(BRANCHES[bi],bi);
+  }
+  var cs=document.createElement('div'); cs.className='branch-card coming-soon';
+  cs.innerHTML='<div class="branch-icon">'+PLUS_SVG+'</div><div class="coming-label">&#8987; Coming Soon</div><div class="branch-name" style="color:rgba(255,255,255,.25)">New Location</div><p class="branch-coming-text">We are expanding the lab. Stay tuned for our next branch.</p>';
+  grid.appendChild(cs);
+  updateCountdowns();
+  setInterval(updateCountdowns,30000);
+})();
+
+var CLOSING_SOON_THRESHOLD = 60; // mins — show "Closing in X" when within this many minutes of closing
+
+function updateCountdowns(){
+  for(var i=0;i<countdownEls.length;i++){
+    var entry=countdownEls[i];
+    var stEl=document.getElementById(entry.stId);
+    var cd=getBranchCountdown(entry.branch);
+    if(!stEl) continue;
+
+    if(!cd){
+      // no parseable hours — show generic open badge
+      stEl.innerHTML='<span class="branch-status open"><span class="branch-dot"></span>Open</span>';
+      continue;
+    }
+
+    if(cd.open){
+      if(cd.mins<=CLOSING_SOON_THRESHOLD){
+        // open but closing soon
+        stEl.innerHTML='<span class="branch-status opening"><span class="branch-dot"></span>Closing in '+formatCountdown(cd.mins)+'</span>';
+      } else {
+        // comfortably open — show OPEN NOW, no timer needed
+        stEl.innerHTML='<span class="branch-status open"><span class="branch-dot"></span>Open Now</span>';
+      }
+    } else {
+      // closed — show countdown to opening
+      stEl.innerHTML='<span class="branch-status opening"><span class="branch-dot"></span>Opens in '+formatCountdown(cd.mins)+'</span>';
+    }
+  }
+}
+
+/* ── POPULARITY LIST ── */
+(function(){
+  var list=document.getElementById('popularityList'); if(!list) return;
+  var rankSyms=['&#127947;','&#129352;','&#129353;'];
+  for(var pi=0;pi<POPULARITY.length;pi++){
+    (function(p,rank){
+      var f=F[p.idx];
+      var row=document.createElement('div'); row.className='pop-row';
+      var rankCls=rank===0?'gold':rank===1?'silver':rank===2?'bronze':'';
+      var rankStr=rank<3?rankSyms[rank]:(rank+1)+'';
+      row.innerHTML='<div class="pop-rank '+rankCls+'">'+rankStr+'</div>'
+        +'<div class="pop-name" style="color:'+f.color+'">'+f.name+'</div>'
+        +'<div class="pop-bar-wrap"><div class="pop-bar-track"><div class="pop-bar-fill" style="background:'+f.color+';--pw:'+p.pct+'%"></div></div></div>'
+        +'<div class="pop-pct" style="color:'+f.color+'">'+p.pct+'%</div>'
+        +'<div class="pop-fire">&#128293;</div>';
+      row.onclick=function(){document.getElementById('f'+p.idx).scrollIntoView({behavior:'smooth'});};
+      list.appendChild(row);
+    })(POPULARITY[pi],pi);
+  }
+  var popObs=new IntersectionObserver(function(e){
+    if(e[0].isIntersecting) list.querySelectorAll('.pop-bar-fill').forEach(function(b){b.style.width=b.style.getPropertyValue('--pw')||b.style.cssText.match(/--pw:([^;]+)/)?b.style.cssText.match(/--pw:([^%]+%)/)[1]:'0%';});
+  },{threshold:.3});
+  popObs.observe(list);
+})();
+
+/* ── COMBO MIXER ── */
+var comboSel=[0,1]; // currently selected indices for picker 1 and 2
+
+function buildDrop(pickerN){
+  var drop=document.getElementById('combo'+pickerN+'Drop'); if(!drop) return;
+  drop.innerHTML='';
+  for(var ci=0;ci<F.length;ci++){
+    (function(f,idx,pn){
+      var row=document.createElement('div');
+      row.className='combo-option'+(comboSel[pn-1]===idx?' selected':'');
+      row.innerHTML='<div class="combo-option-dot" style="background:'+f.color+';box-shadow:0 0 8px '+f.glow+'"></div>'
+        +'<span class="combo-option-emoji">'+f.emoji+'</span>'
+        +'<span class="combo-option-name" style="color:'+f.color+';text-shadow:0 0 16px '+f.glow+'">'+f.name+'</span>'
+        +'<span class="combo-option-check" style="color:'+f.color+'">&#10003;</span>';
+      row.onclick=function(){
+        comboSel[pn-1]=idx;
+        updateTrigger(pn);
+        closeDrop(pn);
+        buildDrop(pn); // refresh checkmarks
+        // animate plus sign briefly
+        var plus=document.getElementById('comboPlusSign');
+        plus.classList.add('active');
+        setTimeout(function(){plus.classList.remove('active');},400);
+      };
+      drop.appendChild(row);
+    })(F[ci],ci,pickerN);
+  }
+}
+
+function updateTrigger(n){
+  var f=F[comboSel[n-1]];
+  document.getElementById('combo'+n+'Dot').style.background=f.color;
+  document.getElementById('combo'+n+'Dot').style.boxShadow='0 0 10px '+f.glow;
+  document.getElementById('combo'+n+'Name').textContent=f.name;
+  document.getElementById('combo'+n+'Name').style.color=f.color;
+  document.getElementById('combo'+n+'Name').style.textShadow='0 0 20px '+f.glow;
+  document.getElementById('combo'+n+'Trigger').style.borderColor=f.border;
+  document.getElementById('combo'+n+'Trigger').style.boxShadow='0 0 18px '+f.glow.replace(/[\d.]+\)$/,'0.12)');
+}
+
+function toggleDrop(n){
+  var t=document.getElementById('combo'+n+'Trigger');
+  var d=document.getElementById('combo'+n+'Drop');
+  var other=n===1?2:1;
+  closeDrop(other);
+  t.classList.toggle('open');
+  d.classList.toggle('open');
+  if(d.classList.contains('open')) buildDrop(n);
+}
+function closeDrop(n){
+  var t=document.getElementById('combo'+n+'Trigger');
+  var d=document.getElementById('combo'+n+'Drop');
+  if(t) t.classList.remove('open');
+  if(d) d.classList.remove('open');
+}
+
+// close dropdowns on outside click
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.combo-picker')){closeDrop(1);closeDrop(2);}
+});
+
+// init triggers on load
+updateTrigger(1); updateTrigger(2);
+
+var comboAnimId=null;
+function blendFlavors(){
+  var i1=comboSel[0];
+  var i2=comboSel[1];
+  var f1=F[i1],f2=F[i2];
+  var wrap=document.getElementById('comboCanvasWrap'),canvas=document.getElementById('comboCanvas'),card=document.getElementById('comboResultCard');
+  wrap.classList.add('show'); card.classList.remove('show');
+  if(comboAnimId) cancelAnimationFrame(comboAnimId);
+  var ctx=canvas.getContext('2d'),t=0;
+  var c1=f1.color,c2=f2.color;
+  function hexToRgb(h){return{r:parseInt(h.slice(1,3),16),g:parseInt(h.slice(3,5),16),b:parseInt(h.slice(5,7),16)};}
+  var rgb1=hexToRgb(c1),rgb2=hexToRgb(c2);
+  function lerp(a,b,x){return Math.round(a+(b-a)*x);}
+  function drawFrame(){
+    ctx.clearRect(0,0,220,220);
+    ctx.save(); ctx.beginPath(); ctx.arc(110,110,108,0,Math.PI*2); ctx.clip();
+    var mix=(.5+.5*Math.sin(t*.8));
+    var mr=lerp(rgb1.r,rgb2.r,mix),mg=lerp(rgb1.g,rgb2.g,mix),mb=lerp(rgb1.b,rgb2.b,mix);
+    var grad=ctx.createRadialGradient(110,110,0,110,110,110);
+    grad.addColorStop(0,'rgba('+mr+','+mg+','+mb+',1)');
+    grad.addColorStop(1,'rgba('+Math.round(mr*.5)+','+Math.round(mg*.5)+','+Math.round(mb*.5)+',1)');
+    ctx.fillStyle=grad; ctx.fillRect(0,0,220,220);
+    for(var sw=0;sw<6;sw++){
+      var ang=t*.6+sw*Math.PI/3, r=55+20*Math.sin(t*.4+sw);
+      var x=110+r*Math.cos(ang),y=110+r*Math.sin(ang);
+      ctx.beginPath(); ctx.arc(x,y,28+12*Math.sin(t+sw),0,Math.PI*2);
+      var lmx=(sw%2===0)?mix:1-mix;
+      var lr=lerp(rgb2.r,rgb1.r,lmx),lg=lerp(rgb2.g,rgb1.g,lmx),lb=lerp(rgb2.b,rgb1.b,lmx);
+      ctx.fillStyle='rgba('+lr+','+lg+','+lb+',.35)'; ctx.fill();
+    }
+    ctx.restore();
+    ctx.font='bold 14px Nunito,sans-serif'; ctx.fillStyle='rgba(255,255,255,.55)'; ctx.textAlign='center';
+    ctx.fillText(f1.emoji,80,118); ctx.fillText(f2.emoji,140,118);
+    t+=0.04;
+  }
+  var frames=0;
+  function animate(){
+    drawFrame(); frames++;
+    if(frames<90) comboAnimId=requestAnimationFrame(animate);
+    else showComboResult(f1,f2,rgb1,rgb2);
+  }
+  animate();
+}
+function showComboResult(f1,f2,rgb1,rgb2){
+  var seedA=f1.name.length+f2.name.length;
+  var seedB=(f1.color.charCodeAt(1)+f2.color.charCodeAt(1))%10;
+  var adj=COMBO_ADJ[(seedA+seedB)%COMBO_ADJ.length];
+  var noun=COMBO_NOUN[(seedA*2+seedB+3)%COMBO_NOUN.length];
+  var comboName=adj+' '+noun;
+  var mr=Math.round((rgb1.r+rgb2.r)/2),mg=Math.round((rgb1.g+rgb2.g)/2),mb=Math.round((rgb1.b+rgb2.b)/2);
+  var blendColor='rgb('+mr+','+mg+','+mb+')';
+  var descs=['A fusion the lab never expected. Dangerously smooth, wildly good.','Two worlds colliding in a single cup. Bold, beautiful, unforgettable.','The ultimate crossover. Equal parts ice, equal parts magic.','Science + art = this. A flavor that defies all expectations.','Sweet meets sharp. The combo that changes everything.'];
+  var descIdx=(f1.name.length+f2.name.length)%descs.length;
+  document.getElementById('comboEq').textContent=f1.name+' \u00d7 '+f2.name;
+  var nameEl=document.getElementById('comboName'); nameEl.textContent=comboName; nameEl.style.color=blendColor; nameEl.style.textShadow='0 0 40px '+blendColor;
+  document.getElementById('comboDesc').textContent=descs[descIdx];
+  document.getElementById('comboResultCard').classList.add('show');
+  document.getElementById('comboResultCard').dataset.f1=f1.name;
+  document.getElementById('comboResultCard').dataset.f2=f2.name;
+  document.getElementById('comboResultCard').dataset.cname=comboName;
+}
+function orderCombo(){
+  var card=document.getElementById('comboResultCard');
+  var msg=encodeURIComponent('Hi SlushLab! I want to order the combo: '+card.dataset.f1+' + '+card.dataset.f2+' (The '+card.dataset.cname+') \u2603');
+  window.open('https://wa.me/?text='+msg,'_blank');
+}
+
+/* ── ORDER DRAWER ── */
+var orderQty=1, orderFlavor=0, orderSize='Small';
+(function(){
+  var df=document.getElementById('drawerFlavors'); if(!df) return;
+  for(var oi=0;oi<F.length;oi++){
+    (function(f,idx){
+      var btn=document.createElement('button'); btn.className='drawer-flavor-btn'; btn.textContent=f.name;
+      if(idx===0){btn.classList.add('sel');btn.style.background=f.color;btn.style.borderColor=f.color;}
+      btn.onclick=function(){
+        document.querySelectorAll('.drawer-flavor-btn').forEach(function(b){b.classList.remove('sel');b.style.background='';b.style.borderColor='';});
+        btn.classList.add('sel'); btn.style.background=f.color; btn.style.borderColor=f.color;
+        orderFlavor=idx;
+        document.getElementById('drawerTitle').textContent=f.name;
+        document.getElementById('order-btn').style.background=f.color;
+      };
+      df.appendChild(btn);
+    })(F[oi],oi);
+  }
+})();
+function selectSize(s){
+  orderSize=s;
+  document.getElementById('sizeSmall').classList.toggle('sel',s==='Small');
+  document.getElementById('sizeLarge').classList.toggle('sel',s==='Large');
+  var f=F[orderFlavor];
+  document.getElementById('sizeSmall').style.background=s==='Small'?f.color:'';
+  document.getElementById('sizeLarge').style.background=s==='Large'?f.color:'';
+}
+function changeQty(d){orderQty=Math.max(1,Math.min(10,orderQty+d));document.getElementById('qtyDisplay').textContent=orderQty;}
+function openOrderDrawer(){
+  var f=F[orderFlavor];
+  document.getElementById('drawerTitle').textContent=f.name;
+  document.getElementById('order-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('show');
+}
+function closeOrderDrawer(){document.getElementById('order-drawer').classList.remove('open');document.getElementById('drawer-overlay').classList.remove('show');}
+function sendWhatsAppOrder(){
+  var f=F[orderFlavor];
+  var msg='Hi SlushLab! I would like to order:\n\n';
+  msg+='\u2603 Flavor: '+f.name+'\n';
+  msg+='\ud83d\udccc Size: '+orderSize+'\n';
+  msg+='\ud83d\udd22 Quantity: '+orderQty+'\n\n';
+  msg+='Please confirm my order. Thank you!';
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  closeOrderDrawer();
+}
+
+/* ── QUIZ ── */
+var quizAnswers=[], quizResult=null;
+var QUIZ=[
+  {q:"How do you enter a room?",hint:"Be honest",opts:[{label:"&#9889; Everyone notices me",val:"intense"},{label:"&#127754; Quietly, I observe",val:"chill"},{label:"&#128293; I own the whole place",val:"bold"},{label:"&#10024; Floating in, unbothered",val:"dreamy"}]},
+  {q:"Pick your ideal Saturday",hint:"No wrong answers",opts:[{label:"&#127918; Gaming till 3am",val:"intense"},{label:"&#127958; Beach, headphones, nap",val:"chill"},{label:"&#127950; Road trip, no plan",val:"bold"},{label:"&#127800; Slow morning, good book",val:"dreamy"}]},
+  {q:"Your friends describe you as...",hint:"Pick the most accurate",opts:[{label:"&#127761; Mysterious and deep",val:"intense"},{label:"&#129482; Cool and easy-going",val:"chill"},{label:"&#127798; Loud and unforgettable",val:"bold"},{label:"&#129855; Sweet and warm-hearted",val:"dreamy"}]}
+];
+var QUIZ_MAP={intense:0,chill:1,bold:3,dreamy:5};
+var PROFILE_ORDER=["intense","chill","bold","dreamy"];
+(function(){
+  var stepsEl=document.getElementById('quizSteps'); if(!stepsEl) return;
+  for(var qi=0;qi<QUIZ.length;qi++){
+    (function(q,si){
+      var div=document.createElement('div'); div.className='quiz-step'+(si===0?' active':''); div.dataset.step=si;
+      var optsHTML=''; for(var oi=0;oi<q.opts.length;oi++) optsHTML+='<button class="quiz-opt" data-val="'+q.opts[oi].val+'">'+q.opts[oi].label+'</button>';
+      div.innerHTML='<p class="quiz-q">'+q.q+'</p><p class="quiz-hint">'+q.hint+'</p><div class="quiz-options">'+optsHTML+'</div>';
+      div.querySelectorAll('.quiz-opt').forEach(function(btn){
+        btn.addEventListener('click',function(){
+          div.querySelectorAll('.quiz-opt').forEach(function(b){b.classList.remove('chosen');});
+          btn.classList.add('chosen'); quizAnswers[si]=btn.dataset.val;
+          setTimeout(function(){advanceQuiz(si);},380);
+        });
+      });
+      stepsEl.appendChild(div);
+    })(QUIZ[qi],qi);
+  }
+})();
+function advanceQuiz(si){
+  var steps=document.querySelectorAll('.quiz-step'),pips=document.querySelectorAll('.qpip'); pips[si].classList.add('done');
+  if(si<QUIZ.length-1){steps[si].classList.remove('active');steps[si+1].classList.add('active');}
+  else{
+    var tally={};
+    for(var i=0;i<quizAnswers.length;i++){var v=quizAnswers[i];tally[v]=(tally[v]||0)+1;}
+    var winner=PROFILE_ORDER[0],best=0;
+    for(var k=0;k<PROFILE_ORDER.length;k++){var p=PROFILE_ORDER[k];if((tally[p]||0)>best){best=tally[p];winner=p;}}
+    showQuizResult(QUIZ_MAP[winner]);
+  }
+}
+function showQuizResult(idx){
+  var f=F[idx]; document.querySelectorAll('.quiz-step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('resEmoji').innerHTML=f.emoji;
+  var nameEl=document.getElementById('resName'); nameEl.textContent=f.name; nameEl.style.color=f.color; nameEl.style.textShadow='0 0 40px '+f.glow;
+  document.getElementById('resDesc').textContent=f.desc;
+  var go=document.getElementById('resGo'); go.style.background=f.color; quizResult=idx;
+  document.getElementById('quizResult').classList.add('show');
+  document.querySelectorAll('.qpip').forEach(function(p){p.classList.add('done');});
+}
+function goToFlavor(){if(quizResult!==null)document.getElementById('f'+quizResult).scrollIntoView({behavior:'smooth'});}
+function resetQuiz(){
+  quizAnswers=[];quizResult=null;
+  document.getElementById('quizResult').classList.remove('show');
+  document.querySelectorAll('.qpip').forEach(function(p){p.classList.remove('done');});
+  var steps=document.querySelectorAll('.quiz-step');
+  steps.forEach(function(s){s.classList.remove('active');s.querySelectorAll('.quiz-opt').forEach(function(b){b.classList.remove('chosen');});});
+  if(steps[0]) steps[0].classList.add('active');
+}
+
+/* ── FOOTER FLAVOR LIST ── */
+(function(){
+  var list=document.getElementById('footerFlavorList'); if(!list) return;
+  for(var i=0;i<F.length;i++){
+    (function(f,idx){
+      var li=document.createElement('li'),a=document.createElement('a'); a.href='#'; a.textContent=f.name; a.style.color='rgba(255,255,255,.4)';
+      a.addEventListener('mouseover',function(){a.style.color=f.color;});
+      a.addEventListener('mouseout',function(){a.style.color='rgba(255,255,255,.4)';});
+      a.addEventListener('click',function(e){e.preventDefault();document.getElementById('f'+idx).scrollIntoView({behavior:'smooth'});});
+      li.appendChild(a); list.appendChild(li);
+    })(F[i],i);
+  }
+})();
+
+/* ── INTERSECTION OBSERVER (flavors) ── */
+var cards=document.querySelectorAll('.fsec-card'),dots=document.querySelectorAll('.dot');
+var navAccent=document.getElementById('navAccent'),ticker=document.getElementById('flavor-ticker');
+var scrollBar=document.getElementById('scroll-bar'),cglow=document.getElementById('cursor-glow');
+var orderBar=document.getElementById('order-bar'),orderName=document.getElementById('order-bar-name'),orderBtn=document.getElementById('order-btn');
+var activeF=F[0], inViewSet={};
+function hexToRgb(hex){return parseInt(hex.slice(1,3),16)+','+parseInt(hex.slice(3,5),16)+','+parseInt(hex.slice(5,7),16);}
+function setActiveColor(col){document.getElementById('scroll-bar').style.background=col;document.documentElement.style.setProperty('--active-color',col);}
+
+var counterEl=document.createElement('div');
+counterEl.style.cssText='position:fixed;bottom:5.5rem;right:1.8rem;z-index:185;font-family:Fredoka One,cursive;font-size:clamp(4rem,8vw,7rem);line-height:1;pointer-events:none;user-select:none;opacity:0;transition:opacity .5s,color .6s;letter-spacing:-2px';
+document.body.appendChild(counterEl);
+function updateCounter(idx){counterEl.textContent=(idx<9?'0':'')+(idx+1);counterEl.style.color=F[idx].color;counterEl.style.opacity='.07';counterEl.style.textShadow='0 0 80px '+F[idx].color;}
+
+function triggerPour(card,color){
+  var outer=card.querySelector('.cup-pour-outer'); if(!outer) return;
+  outer.classList.remove('pouring'); void outer.offsetWidth; outer.classList.add('pouring');
+  var old=outer.querySelector('.liquid-trail'); if(old&&old.parentNode) old.parentNode.removeChild(old);
+  var trail=document.createElement('div'); trail.className='liquid-trail'; trail.style.background='linear-gradient(180deg,transparent 0%,'+color+' 100%)'; outer.appendChild(trail);
+  setTimeout(function(){if(trail.parentNode)trail.parentNode.removeChild(trail);},900);
+}
+function shatterCup(card,color){
+  var outer=card.querySelector('.cup-pour-outer'); if(!outer) return;
+  var rect=outer.getBoundingClientRect(),cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+  var wrap=document.createElement('div'); wrap.style.cssText='position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:500;overflow:hidden'; document.body.appendChild(wrap);
+  var pts=["15,0 28,24 2,20","0,0 20,8 14,28 0,26","16,2 30,18 10,30","0,8 18,0 22,20 6,28","4,0 28,6 26,28 2,22","12,0 30,14 20,30 0,18","0,4 24,0 28,22 4,26","8,0 30,10 24,30 0,20","14,2 28,20 0,24","2,0 26,8 20,28 0,16","0,6 22,2 28,24 4,28","10,0 28,12 22,28 0,22"];
+  for(var k=0;k<12;k++){
+    var angle=k/12*Math.PI*2+(Math.random()-.5)*.6,dist=100+Math.random()*150;
+    var tx=Math.cos(angle)*dist,ty=Math.sin(angle)*dist-60,rot=(Math.random()-.5)*720,sz=16+Math.random()*22;
+    var shard=document.createElement('div'); shard.style.cssText='position:absolute;left:'+cx+'px;top:'+cy+'px'; shard.innerHTML='<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 30 30"><polygon points="'+pts[k%pts.length]+'" fill="'+color+'" opacity="0.72"/></svg>'; wrap.appendChild(shard);
+    shard.animate([{transform:'translate(-50%,-50%) scale(1) rotate(0deg)',opacity:.8},{transform:'translate(calc(-50% + '+tx+'px),calc(-50% + '+ty+'px)) scale(.05) rotate('+rot+'deg)',opacity:0}],{duration:650+Math.random()*300,easing:'cubic-bezier(.25,.46,.45,.94)',fill:'forwards'});
+  }
+  setTimeout(function(){if(wrap.parentNode)wrap.parentNode.removeChild(wrap);},1100);
+}
+
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    var idx=parseInt(e.target.getAttribute('data-i'));
+    if(e.isIntersecting){
+      e.target.classList.add('in'); triggerPour(e.target,F[idx].color);
+      if(prevIdx!==idx){if(prevIdx>=0)playWhoosh();playFizzCrunch(F[idx].color);prevIdx=idx;}
+      inViewSet[idx]=true; activeF=F[idx];
+      dots.forEach(function(d,i){d.classList.toggle('active',i===idx);});
+      navAccent.style.width='100%'; navAccent.style.background=F[idx].color;
+      ticker.textContent=F[idx].name; ticker.style.borderColor=F[idx].border; ticker.style.color=F[idx].color; ticker.classList.add('show');
+      cglow.style.background='radial-gradient(circle,rgba('+hexToRgb(F[idx].color)+',.07) 0%,transparent 70%)';
+      orderName.textContent=F[idx].name; orderName.style.color=F[idx].color; orderBtn.style.background=F[idx].color;
+      orderBar.style.borderColor=F[idx].border; setActiveColor(F[idx].color); orderBar.classList.add('show');
+      updateCounter(idx);
+    } else {
+      if(inViewSet[idx]){shatterCup(e.target,F[idx].color);inViewSet[idx]=false;}
+      e.target.classList.remove('in');
+    }
+  });
+},{threshold:.3});
+cards.forEach(function(c){obs.observe(c);});
+
+var heroObs=new IntersectionObserver(function(e){
+  if(e[0].isIntersecting){ticker.classList.remove('show');orderBar.classList.remove('show');counterEl.style.opacity='0';setActiveColor('#5BB8F5');}
+},{threshold:.5});
+heroObs.observe(document.querySelector('.hero'));
+
+/* ── SCROLL PROGRESS + BACK TO TOP ── */
+var backTopBtn=document.getElementById('back-top');
+window.addEventListener('scroll',function(){
+  var h=document.body.scrollHeight-window.innerHeight;
+  if(h>0) scrollBar.style.width=(window.scrollY/h*100)+'%';
+  backTopBtn.classList.toggle('show',window.scrollY>600);
+},{passive:true});
+function backToTop(){
+  backTopBtn.classList.add('launching');
+  setTimeout(function(){window.scrollTo({top:0,behavior:'smooth'});},300);
+  setTimeout(function(){backTopBtn.classList.remove('launching');},700);
+}
+
+/* ── 3D TILT ── */
+(function(){
+  document.querySelectorAll('.fsec').forEach(function(sec){
+    sec.addEventListener('mousemove',function(e){
+      var outer=sec.querySelector('.cup-pour-outer'); if(!outer) return;
+      var r=sec.getBoundingClientRect();
+      var nx=((e.clientX-r.left)/r.width-.5)*2, ny=((e.clientY-r.top)/r.height-.5)*2;
+      outer.style.transform='perspective(700px) rotateX('+(ny*14)+'deg) rotateY('+(-nx*14)+'deg) scale(1.04)';
+    });
+    sec.addEventListener('mouseleave',function(){
+      var outer=sec.querySelector('.cup-pour-outer'); if(outer) outer.style.transform='perspective(700px) rotateX(0) rotateY(0) scale(1)';
+    });
+  });
+})();
+
+/* ── CUSTOM CURSOR ── */
+var cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+var mx=window.innerWidth/2,my=window.innerHeight/2,cx1=mx,cy1=my,cx2=mx,cy2=my,cx3=mx,cy3=my;
+window.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});
+document.addEventListener('mouseover',function(e){if(e.target.matches&&e.target.matches('a,button,.dot,.ftag,.quiz-opt,.drawer-flavor-btn,.combo-mix-btn,.branch-card')){ring.style.width='28px';ring.style.height='28px';ring.style.background='rgba(255,255,255,.2)';}});
+document.addEventListener('mouseout',function(e){if(e.target.matches&&e.target.matches('a,button,.dot,.ftag,.quiz-opt,.drawer-flavor-btn,.combo-mix-btn,.branch-card')){ring.style.width='14px';ring.style.height='14px';ring.style.background='rgba(255,255,255,.55)';}});
+function animCursor(){
+  cx1+=(mx-cx1)*.85;cy1+=(my-cy1)*.85;
+  cx2+=(mx-cx2)*.18;cy2+=(my-cy2)*.18;
+  cx3+=(mx-cx3)*.08;cy3+=(my-cy3)*.08;
+  cur.style.left=cx1+'px';cur.style.top=cy1+'px';
+  ring.style.left=cx2+'px';ring.style.top=cy2+'px';
+  cglow.style.left=cx3+'px';cglow.style.top=cy3+'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+if('ontouchstart' in window){cur.style.display='none';ring.style.display='none';document.body.style.cursor='auto';}
+
+/* ── MOBILE SWIPE ── */
+(function(){
+  var sections=document.querySelectorAll('.fsec'), touchStart=null;
+  sections.forEach(function(sec,si){
+    sec.addEventListener('touchstart',function(e){touchStart=e.touches[0].clientY;},{passive:true});
+    sec.addEventListener('touchend',function(e){
+      if(touchStart===null) return;
+      var dy=touchStart-e.changedTouches[0].clientY;
+      if(Math.abs(dy)>60){
+        var nextIdx=si+(dy>0?1:-1);
+        if(nextIdx>=0&&nextIdx<sections.length) sections[nextIdx].scrollIntoView({behavior:'smooth'});
+      }
+      touchStart=null;
+    },{passive:true});
+  });
+})();
+
+/* ── HERO CRYSTALS ── */
+var cWrap=document.getElementById('crystals');
+for(var ci=0;ci<22;ci++){
+  var el=document.createElement('div'); el.className='crystal';
+  var sz=Math.random()*18+7;
+  el.style.cssText='left:'+(Math.random()*100)+'%;bottom:-30px;animation-duration:'+(Math.random()*14+7)+'s;animation-delay:'+(Math.random()*10)+'s;';
+  el.innerHTML='<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 20 20"><path d="M10 0L10 20M0 10L20 10M2.9 2.9L17.1 17.1M17.1 2.9L2.9 17.1" stroke="rgba(91,184,245,.55)" stroke-width="1.4" fill="none"/><circle cx="10" cy="10" r="2.5" fill="rgba(91,184,245,.4)"/></svg>';
+  cWrap.appendChild(el);
+}
+
+/* ── INTRO LOADER ── */
+(function(){
+  var fill=document.getElementById('introFill'),intro=document.getElementById('intro');
+  var prog=0;
+  var iv=setInterval(function(){
+    prog+=Math.random()*18+4;
+    if(prog>=100){prog=100;clearInterval(iv);}
+    fill.style.width=Math.min(prog,100)+'%';
+    if(prog>=100) setTimeout(function(){intro.classList.add('gone');},280);
+  },60);
+})();
+</script>
+</body>
+</html>
