@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SlushLab – Beat the Heat</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<meta name="description" content="SlushLab — 9 premium hand-crafted slush flavors. Beat the Heat. 3 branches in Peshawar.">
+<meta name="theme-color" content="#04081a">
+<meta property="og:title" content="SlushLab – Beat the Heat">
+<meta property="og:description" content="9 premium hand-crafted slush flavors. Dark Pulse, Mango Magic, Strawberry Splash and more. Find us in Peshawar.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://placehold.co/1200x630/04081a/5BB8F5?text=SlushLab+%E2%80%93+Beat+the+Heat">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SlushLab – Beat the Heat">
+<meta name="twitter:description" content="9 premium hand-crafted slush flavors in Peshawar.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzA0MDgxYSIvPjxwb2x5Z29uIHBvaW50cz0iNCwxMSAyOCwxMSAyNSwyOCA3LDI4IiBmaWxsPSJub25lIiBzdHJva2U9IiM1QkI4RjUiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHBvbHlnb24gcG9pbnRzPSI0LDE5IDI4LDE5IDI1LDI4IDcsMjgiIGZpbGw9IiNGRjU1MDAiIG9wYWNpdHk9Ii45Ii8+PGVsbGlwc2UgY3g9IjE2IiBjeT0iMTIiIHJ4PSIxMiIgcnk9IjUiIGZpbGw9IiNGRjcwMzAiLz48cmVjdCB4PSIyMCIgeT0iMiIgd2lkdGg9IjMiIGhlaWdodD0iMTMiIHJ4PSIxLjUiIGZpbGw9IiM1QkI4RjUiIHRyYW5zZm9ybT0icm90YXRlKDgsMjAsMTIpIi8+PC9zdmc+">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--navy:#04081a;--navy2:#060c22;--blue:#5BB8F5;--speed:0.9s;--active-color:#5BB8F5}
@@ -102,11 +112,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.1rem 2.5rem;displa
 
 
 /* FLAVOR SECTIONS */
-.fsec{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:7rem 2rem 5rem;touch-action:pan-y}
+.fsec{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:7rem 2rem 5rem}
 .fsec-bg{position:absolute;inset:0;pointer-events:none}
 .aura-pulse{position:absolute;inset:-20%;border-radius:50%;pointer-events:none;opacity:0;animation:auraPulse 4s ease-in-out infinite;background:radial-gradient(ellipse 40% 40% at 50% 50%,var(--fc,transparent) 0%,transparent 65%)}
 @keyframes auraPulse{0%,100%{opacity:0;transform:scale(.88)}50%{opacity:.13;transform:scale(1.12)}}
-.fsec-card{display:flex;align-items:center;gap:5rem;max-width:1080px;width:100%;transform:perspective(1400px) translateZ(-500px) rotateY(28deg) scale(.55);opacity:0;transition:transform var(--speed) cubic-bezier(.16,1,.3,1),opacity calc(var(--speed)*.9) ease}
+.fsec-card{display:flex;align-items:center;gap:5rem;max-width:1080px;width:100%;transform:perspective(1400px) translateZ(-500px) rotateY(28deg) scale(.55);opacity:0;transition:transform var(--speed) cubic-bezier(.16,1,.3,1),opacity calc(var(--speed)*.9) ease;will-change:transform,opacity;-webkit-backface-visibility:hidden;backface-visibility:hidden}
 .fsec-card.in{transform:perspective(1400px) translateZ(0) rotateY(0) scale(1);opacity:1}
 .fsec:nth-child(even) .fsec-card{flex-direction:row-reverse;transform:perspective(1400px) translateZ(-500px) rotateY(-28deg) scale(.55)}
 .fsec:nth-child(even) .fsec-card.in{transform:perspective(1400px) translateZ(0) rotateY(0) scale(1)}
@@ -157,17 +167,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.1rem 2.5rem;displa
 .iparticle{position:absolute;pointer-events:none;animation:ifloat linear infinite;opacity:0}
 @keyframes ifloat{0%{transform:translateY(80vh) rotate(0deg);opacity:0}8%{opacity:.55}92%{opacity:.2}100%{transform:translateY(-10vh) rotate(480deg);opacity:0}}
 
-/* COMBO MIXER */
-#combo-section{padding:7rem 2rem 6rem;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--navy) 0%,#010f20 50%,var(--navy) 100%)}
-.combo-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(91,184,245,.04) 0%,transparent 70%);pointer-events:none}
-.combo-header{text-align:center;margin-bottom:3.5rem;position:relative;z-index:2}
-.combo-eyebrow{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--blue);margin-bottom:.6rem}
-.combo-title{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,5vw,3.5rem);color:#fff;margin-bottom:.5rem}
-.combo-sub{font-size:.9rem;color:rgba(255,255,255,.35);max-width:400px;margin:0 auto}
-.combo-inner{max-width:780px;margin:0 auto;position:relative;z-index:2}
-.combo-pickers{display:flex;align-items:center;justify-content:center;gap:2rem;margin-bottom:2.5rem;flex-wrap:wrap}
-.combo-picker{position:relative;min-width:220px}
-.combo-picker-label{display:block;font-size:.65rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.75rem;text-align:center}
+
 
 /* custom dropdown trigger */
 .combo-trigger{
@@ -436,6 +436,18 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
 .footer-hb{font-size:.7rem;color:rgba(255,255,255,.15);letter-spacing:1px}
 
 /* RESPONSIVE */
+@media(prefers-reduced-motion:reduce){
+  .crystal,.iparticle,.aura-pulse,#cursor,#cursor-ring,.cup-wrap{animation:none!important}
+  .fsec-card{transform:none!important;opacity:1!important;transition:none!important}
+  .fsec-card.in{transform:none!important}
+  .fsec:nth-child(even) .fsec-card{transform:none!important}
+  .cup-pour-outer{animation:none!important;transition:none!important}
+  .formula-fill{transition:none!important}
+  .pop-bar-fill{transition:none!important}
+  #cursor,#cursor-ring{display:none!important}
+  body{cursor:auto!important}
+}
+
 @media(max-width:760px){
   .fsec-card,.fsec:nth-child(even) .fsec-card{flex-direction:column;gap:2rem;align-items:center}
   .finfo{text-align:center;max-width:100%}
@@ -455,6 +467,356 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
   .combo-pickers{gap:1rem}
   .combo-picker{min-width:180px}
   .combo-select{min-width:160px}
+}
+
+/* ── HAMBURGER BUTTON ── */
+#burger{
+  display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:36px;height:36px;background:none;border:none;cursor:none;
+  padding:4px;z-index:220;position:relative;flex-shrink:0;
+}
+#burger span{
+  display:block;height:2px;border-radius:1px;
+  background:rgba(255,255,255,.7);
+  transition:transform .35s cubic-bezier(.16,1,.3,1),opacity .25s,width .3s;
+}
+#burger span:nth-child(1){width:22px}
+#burger span:nth-child(2){width:16px}
+#burger span:nth-child(3){width:20px}
+#burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);width:22px}
+#burger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+#burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);width:22px}
+
+/* ── FULLSCREEN MOBILE MENU ── */
+#mobile-menu{
+  position:fixed;inset:0;z-index:215;
+  background:rgba(4,8,26,.97);backdrop-filter:blur(28px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;
+  transform:translateX(100%);
+  transition:transform .45s cubic-bezier(.16,1,.3,1);
+  pointer-events:none;
+}
+#mobile-menu.open{transform:translateX(0);pointer-events:all}
+.mob-nav-item{
+  width:100%;text-align:center;
+  padding:1.1rem 2rem;
+  font-family:'Fredoka One',cursive;font-size:2rem;
+  text-decoration:none;cursor:none;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  opacity:0;transform:translateX(40px);
+  transition:opacity .4s,transform .4s,color .2s,background .2s;
+}
+#mobile-menu.open .mob-nav-item{opacity:1;transform:none}
+#mobile-menu.open .mob-nav-item:nth-child(1){transition-delay:.05s}
+#mobile-menu.open .mob-nav-item:nth-child(2){transition-delay:.1s}
+#mobile-menu.open .mob-nav-item:nth-child(3){transition-delay:.15s}
+#mobile-menu.open .mob-nav-item:nth-child(4){transition-delay:.2s}
+#mobile-menu.open .mob-nav-item:nth-child(5){transition-delay:.25s}
+#mobile-menu.open .mob-nav-item:nth-child(6){transition-delay:.3s}
+.mob-nav-item:hover{background:rgba(255,255,255,.04)}
+.mob-sound-row{margin-top:2rem;opacity:0;transition:opacity .4s .35s}
+#mobile-menu.open .mob-sound-row{opacity:1}
+
+/* ── SHARE BUTTON ── */
+.flavor-share-btn{
+  display:inline-flex;align-items:center;gap:.45rem;
+  font-size:.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.3);background:none;border:1px solid rgba(255,255,255,.1);
+  padding:.3rem .85rem;border-radius:50px;cursor:none;
+  transition:color .2s,border-color .2s,background .2s;
+  font-family:'Nunito',sans-serif;margin-top:1rem;
+}
+.flavor-share-btn:hover{color:var(--fc);border-color:var(--fc-border);background:var(--fc-dim)}
+.flavor-share-btn.copied{color:#4CBF24;border-color:rgba(76,191,36,.4);background:rgba(76,191,36,.08)}
+
+/* ── SCROLL SNAP (mobile) ── */
+@media(max-width:760px){
+  #flavors{scroll-snap-type:y mandatory;overflow-y:auto;height:100vh;overscroll-behavior:none}
+  .fsec{scroll-snap-align:start;min-height:100vh}
+  .fsec-card,.fsec:nth-child(even) .fsec-card{transform:translateY(40px) scale(.95)!important}
+  .fsec-card.in,.fsec:nth-child(even) .fsec-card.in{transform:none!important}
+  .cup-pour-outer{transform-style:flat}
+  #burger{display:flex}
+  .nav-links{display:none!important}
+}
+
+/* ── FLAVOR VOTE SECTION ── */
+#vote-section{
+  padding:5rem 2rem 4rem;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,var(--navy) 0%,#020e1c 50%,var(--navy) 100%);
+}
+.vote-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(91,184,245,.04) 0%,transparent 70%);pointer-events:none}
+.vote-header{text-align:center;margin-bottom:3rem;position:relative;z-index:2}
+.vote-eyebrow{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--blue);margin-bottom:.6rem}
+.vote-title{font-family:'Fredoka One',cursive;font-size:clamp(2rem,5vw,3.2rem);color:#fff;margin-bottom:.4rem}
+.vote-sub{font-size:.88rem;color:rgba(255,255,255,.35);letter-spacing:.3px}
+.vote-sub b{color:rgba(255,255,255,.6)}
+
+.vote-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:.85rem;max-width:960px;margin:0 auto 2.5rem;position:relative;z-index:2;
+}
+.vote-card{
+  background:rgba(255,255,255,.03);border:1.5px solid rgba(255,255,255,.07);
+  border-radius:16px;padding:1rem 1.2rem;
+  display:flex;align-items:center;gap:.9rem;
+  cursor:none;transition:transform .25s,border-color .25s,background .25s;
+  position:relative;overflow:hidden;
+}
+.vote-card::before{content:'';position:absolute;inset:0;background:var(--vc,transparent);opacity:0;transition:opacity .3s;border-radius:14px}
+.vote-card:hover{transform:translateY(-3px)}
+.vote-card:hover::before{opacity:.06}
+.vote-card.voted{border-color:var(--vc);box-shadow:0 0 18px var(--vg)}
+.vote-card.voted::before{opacity:.08}
+.vote-card.winner{border-color:#FFD700;box-shadow:0 0 24px rgba(255,215,0,.3)}
+
+.vote-emoji{font-size:1.5rem;flex-shrink:0;line-height:1}
+.vote-info{flex:1;min-width:0}
+.vote-fname{font-family:'Fredoka One',cursive;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vote-bar-track{height:3px;background:rgba(255,255,255,.07);border-radius:2px;margin-top:.4rem;overflow:hidden}
+.vote-bar-fill{height:100%;border-radius:2px;background:var(--vc);transition:width .8s cubic-bezier(.34,1,.64,1)}
+.vote-count{font-size:.65rem;color:rgba(255,255,255,.3);margin-top:.25rem;font-weight:700;letter-spacing:.5px}
+
+.vote-btn{
+  flex-shrink:0;width:34px;height:34px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);
+  color:rgba(255,255,255,.4);font-size:.9rem;cursor:none;
+  transition:all .25s;display:flex;align-items:center;justify-content:center;
+  font-family:'Nunito',sans-serif;
+}
+.vote-btn:hover{border-color:rgba(255,255,255,.4);color:#fff;background:rgba(255,255,255,.1)}
+.vote-card.voted .vote-btn{background:var(--vc);border-color:var(--vc);color:#030813;font-weight:900}
+.vote-winner-strip{
+  text-align:center;position:relative;z-index:2;
+  font-size:.75rem;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;
+}
+.vote-winner-strip b{color:#FFD700}
+.vote-reset{
+  background:none;border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.2);
+  font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:.3rem .9rem;border-radius:50px;cursor:none;font-family:'Nunito',sans-serif;
+  transition:all .25s;margin-top:.8rem;
+}
+.vote-reset:hover{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.5)}
+
+/* ── VOTE BUTTON HOVER STATE POLISH ── */
+.vote-btn:not(.voted-btn){color:rgba(255,255,255,.35)}
+.vote-btn::before{content:'&#10003;'}
+
+/* ── TODAY'S SPECIAL hover glow ── */
+#todays-special{transition:background .3s,box-shadow .3s}
+#todays-special:hover{box-shadow:0 4px 30px rgba(91,184,245,.08)}
+
+/* ── SMOOTH SECTION REVEAL for vote + popularity ── */
+.pop-row{opacity:0;transform:translateX(-18px);transition:opacity .5s,transform .5s}
+.pop-row.visible{opacity:1;transform:none}
+.vote-card{opacity:0;transform:translateY(14px);transition:opacity .45s,transform .45s,border-color .25s,background .25s,box-shadow .25s}
+.vote-card.visible{opacity:1;transform:translateY(0)}
+
+/* ── BRANCH CARD hover glow tint ── */
+.branch-card{transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s,background .35s,box-shadow .35s}
+.branch-card:hover{box-shadow:0 12px 40px rgba(91,184,245,.1)}
+
+/* ── FORMULA CARD hover ── */
+.formula-card{transition:border-color .3s,background .3s}
+.formula-card:hover{border-color:rgba(255,255,255,.14);background:rgba(0,0,0,.45)}
+
+/* ── MOOD PALETTE swatch tooltip ── */
+.mood-swatch{position:relative}
+.mood-swatch::after{
+  content:attr(title);position:absolute;bottom:130%;left:50%;transform:translateX(-50%);
+  font-size:.6rem;font-weight:800;background:rgba(0,0,0,.8);color:#fff;
+  padding:.2rem .5rem;border-radius:4px;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity .2s;letter-spacing:.5px;
+}
+.mood-swatch:hover::after{opacity:1}
+
+/* ── ACTIVE NAV LINK indicator ── */
+.nav-links a.nav-active{color:#fff;opacity:1}
+
+/* ── COMBO RESULT share WA polish ── */
+.combo-wa-btn{margin:0 auto;display:inline-flex}
+
+/* ── QUIZ option selected glow ── */
+.quiz-opt.chosen{
+  box-shadow:0 0 0 2px var(--qc,#5BB8F5);
+  background:rgba(255,255,255,.08);
+}
+
+/* ── BACK TO TOP tooltip ── */
+#back-top::after{
+  content:'Back to top';position:absolute;right:54px;top:50%;transform:translateY(-50%);
+  font-size:.65rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  background:rgba(0,0,0,.75);color:rgba(255,255,255,.7);padding:.25rem .65rem;
+  border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity .2s;
+}
+#back-top:hover::after{opacity:1}
+#back-top{position:fixed;bottom:5.5rem;right:1.5rem}
+
+/* ── SCROLL PROGRESS color transition ── */
+#scroll-bar{transition:width .1s linear, background .6s ease}
+
+/* ── POPULAR bars staggered entry ── */
+.pop-row:nth-child(1){transition-delay:.05s}
+.pop-row:nth-child(2){transition-delay:.1s}
+.pop-row:nth-child(3){transition-delay:.15s}
+.pop-row:nth-child(4){transition-delay:.2s}
+.pop-row:nth-child(5){transition-delay:.25s}
+.pop-row:nth-child(6){transition-delay:.3s}
+.pop-row:nth-child(7){transition-delay:.35s}
+.pop-row:nth-child(8){transition-delay:.4s}
+.pop-row:nth-child(9){transition-delay:.45s}
+
+/* ── LAB MIXER (inside lab section) ── */
+.lab-mixer{
+  max-width:960px;margin:4rem auto 0;position:relative;z-index:2;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(91,184,245,.12);
+  border-radius:24px;padding:2.5rem 2rem;
+  backdrop-filter:blur(12px);
+}
+.lab-mixer-header{text-align:center;margin-bottom:2.5rem}
+.lab-mixer-eyebrow{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem}
+.lab-mixer-title{font-family:'Fredoka One',cursive;font-size:2.2rem;color:#fff;margin-bottom:.3rem}
+.lab-mixer-sub{font-size:.85rem;color:rgba(255,255,255,.35)}
+
+.lab-mixer-body{display:flex;align-items:flex-start;justify-content:center;gap:2rem;flex-wrap:wrap}
+.lm-picker{display:flex;flex-direction:column;align-items:center;gap:.85rem;min-width:130px}
+.lm-picker-label{font-size:.65rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.lm-tube-preview{cursor:none;transition:transform .3s;filter:drop-shadow(0 8px 20px rgba(0,0,0,.4))}
+.lm-tube-preview:hover{transform:scale(1.06)}
+.lm-flavor-pills{display:flex;flex-direction:column;gap:.4rem;max-height:260px;overflow-y:auto;width:100%;padding-right:2px}
+.lm-flavor-pills::-webkit-scrollbar{width:3px}
+.lm-flavor-pills::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.lm-pill{
+  padding:.35rem .8rem;border-radius:50px;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04);font-size:.72rem;font-weight:700;
+  cursor:none;transition:all .2s;white-space:nowrap;letter-spacing:.3px;
+  color:rgba(255,255,255,.5);text-align:center;font-family:'Nunito',sans-serif;
+}
+.lm-pill:hover{background:rgba(255,255,255,.09);color:#fff}
+.lm-pill.sel{color:#030813;font-weight:900}
+
+.lm-center{display:flex;flex-direction:column;align-items:center;gap:1.2rem;min-width:140px}
+.lm-mix-btn{
+  background:linear-gradient(135deg,var(--blue),#9B3FE8);
+  color:#fff;border:none;border-radius:50px;
+  padding:.75rem 1.8rem;font-size:.9rem;font-weight:900;
+  cursor:none;font-family:'Nunito',sans-serif;
+  transition:transform .25s,box-shadow .25s,opacity .3s;
+  box-shadow:0 8px 24px rgba(91,184,245,.25);letter-spacing:.5px;
+}
+.lm-mix-btn:hover{transform:scale(1.06) translateY(-2px);box-shadow:0 14px 32px rgba(91,184,245,.35)}
+.lm-mix-btn:disabled{opacity:.4;transform:none;cursor:not-allowed}
+.lm-beaker-wrap{display:flex;flex-direction:column;align-items:center;gap:.75rem}
+.lm-result-name{
+  font-family:'Fredoka One',cursive;font-size:1.3rem;text-align:center;
+  min-height:1.8rem;transition:color .5s;
+}
+.lm-result-desc{
+  font-size:.8rem;color:rgba(255,255,255,.45);text-align:center;
+  line-height:1.6;max-width:200px;min-height:2.5rem;
+}
+.lm-order-btn{
+  background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.3);
+  color:#25D366;padding:.5rem 1.3rem;border-radius:50px;
+  font-size:.78rem;font-weight:800;cursor:none;
+  font-family:'Nunito',sans-serif;transition:all .3s;
+}
+.lm-order-btn:hover{background:rgba(37,211,102,.25);transform:scale(1.05)}
+
+/* same-flavor message style */
+.lm-result-name.same{animation:labSamePulse .6s ease-in-out 2}
+@keyframes labSamePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+@media(max-width:700px){
+  .lab-mixer-body{flex-direction:column;align-items:center}
+  .lm-flavor-pills{flex-direction:row;flex-wrap:wrap;justify-content:center;max-height:none}
+  .lm-picker{min-width:unset;width:100%}
+}
+
+
+
+/* ─── LAB MIXER: beaker glow ─── */
+#lmBeakerSvg{filter:drop-shadow(0 0 0 transparent);transition:filter .8s}
+#lmBeakerSvg.poured{filter:drop-shadow(0 0 22px var(--bk-glow,rgba(91,184,245,.4)))}
+
+/* ─── LAB TUBES: click to select for mixer ─── */
+.tube-col{cursor:none;transition:transform .25s}
+.tube-col:hover{transform:translateY(-6px) scale(1.05)}
+.tube-col.selected-a::after,.tube-col.selected-b::after{
+  content:attr(data-label);
+  display:block;font-size:.6rem;font-weight:900;letter-spacing:2px;
+  text-transform:uppercase;text-align:center;margin-top:.3rem;
+  padding:.15rem .5rem;border-radius:4px;
+}
+.tube-col.selected-a::after{background:rgba(91,184,245,.2);color:var(--blue)}
+.tube-col.selected-b::after{background:rgba(155,63,232,.2);color:#9B3FE8}
+
+/* ─── VOTE: heart animation ─── */
+.vote-btn{font-size:1rem;line-height:1}
+.vote-card.voted .vote-btn{animation:heartPop .4s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes heartPop{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
+
+/* ─── BRANCH CARD: hours icon color ─── */
+.branch-hours svg{color:var(--blue);flex-shrink:0}
+
+/* ─── QUIZ: progress pips animated ─── */
+.qpip.done{background:var(--blue);box-shadow:0 0 8px rgba(91,184,245,.5)}
+
+/* ─── FOOTER: flavor tags hover ─── */
+.ftag{transition:transform .2s,box-shadow .2s}
+.ftag:hover{transform:scale(1.07);box-shadow:0 4px 14px rgba(0,0,0,.3)}
+
+/* ─── GLOBAL: focus ring for keyboard users ─── */
+*:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+
+/* ─── NAV: active link underline ─── */
+.nav-links a{position:relative}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;right:0;
+  height:2px;border-radius:1px;background:var(--active-color);
+  transform:scaleX(0);transform-origin:center;transition:transform .3s;
+}
+.nav-links a.nav-active::after{transform:scaleX(1)}
+.nav-links a.nav-active{color:#fff}
+
+/* ─── SCROLL HINT: hide after first scroll ─── */
+.scroll-hint{transition:opacity .5s}
+.scroll-hint.hidden{opacity:0;pointer-events:none}
+
+/* ─── FLAVOR TICKER: pill border animated ─── */
+#flavor-ticker{
+  animation:none;
+  position:fixed;top:1.1rem;left:50%;transform:translateX(-50%);
+}
+#flavor-ticker.show{animation:tickerPulse 3s ease-in-out infinite}
+@keyframes tickerPulse{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 4px rgba(255,255,255,.05)}}
+
+/* ─── SECTION DIVIDERS: subtle gradient hr ─── */
+.sec-divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
+  border:none;margin:0;
+}
+
+/* ─── LAB: tube click tooltip ─── */
+.tube-click-hint{
+  text-align:center;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.2);margin-top:1rem;position:relative;z-index:2;
+}
+
+/* ─── POPULARITY: click row to scroll ─── */
+.pop-row{cursor:none}
+
+/* ─── MOBILE: larger tap targets ─── */
+@media(max-width:760px){
+  .quiz-opt{padding:1rem 1.4rem;font-size:.95rem}
+  .vote-btn{width:40px;height:40px}
+  .lm-pill{padding:.45rem 1rem;font-size:.78rem}
+  .branch-map-btn{padding:.6rem 0}
 }
 </style>
 </head>
@@ -498,7 +860,7 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
   <ul class="nav-links">
     <li><a href="#hero">Home</a></li>
     <li><a href="#flavors">Flavors</a></li>
-    <li><a href="#combo-section">Mixer</a></li>
+    <li><a href="#vote-section">Vote</a></li>
     <li><a href="#lab-section">The Lab</a></li>
     <li><a href="#branches-section">Branches</a></li>
     <li>
@@ -508,8 +870,25 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
       </button>
     </li>
   </ul>
+  <button id="burger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
   <div class="nav-accent" id="navAccent"></div>
 </nav>
+
+<div id="mobile-menu">
+  <a class="mob-nav-item" href="#hero"    onclick="closeMobileMenu()">Home</a>
+  <a class="mob-nav-item" href="#flavors" onclick="closeMobileMenu()">Flavors</a>
+  <a class="mob-nav-item" href="#vote-section"   onclick="closeMobileMenu()">Vote</a>
+  <a class="mob-nav-item" href="#lab-section"      onclick="closeMobileMenu()">The Lab</a>
+  <a class="mob-nav-item" href="#branches-section" onclick="closeMobileMenu()">Branches</a>
+  <a class="mob-nav-item" href="#quiz-section"     onclick="closeMobileMenu()">Quiz</a>
+  <div class="mob-sound-row">
+    <button id="mob-sound-btn" onclick="toggleSound()" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);padding:.5rem 1.4rem;border-radius:50px;font-size:.8rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:none;font-family:'Nunito',sans-serif;">
+      &#128263; Sound Off
+    </button>
+  </div>
+</div>
 
 <div class="flavor-dots" id="dots"></div>
 
@@ -545,7 +924,7 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
     <p class="hero-count">Scroll to explore each one &#8595;</p>
     <div class="hero-ctas">
       <a href="#flavors" class="btn-p">Explore Flavors</a>
-      <a href="#combo-section" class="btn-g">Mix Flavors</a>
+      <a href="#lab-section" class="btn-g">Enter The Lab</a>
     </div>
   </div>
   <div class="scroll-hint">
@@ -566,47 +945,22 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
 
 <div id="flavors"></div>
 
-<section id="combo-section">
-  <div class="combo-bg"></div>
-  <div class="combo-header">
-    <div class="combo-eyebrow">&#129514; Flavor Science</div>
-    <h2 class="combo-title">Combo Mixer</h2>
-    <p class="combo-sub">Pick two flavors and see what the lab creates</p>
+<hr class="sec-divider">
+<section id="vote-section">
+  <div class="vote-bg"></div>
+  <div class="vote-header">
+    <div class="vote-eyebrow">&#127775; Community Vote</div>
+    <h2 class="vote-title">Flavor of the Week</h2>
+    <p class="vote-sub" id="voteSubText">Vote for your favourite &mdash; top voted becomes <b>Featured</b></p>
   </div>
-  <div class="combo-inner">
-    <div class="combo-pickers">
-      <div class="combo-picker">
-        <span class="combo-picker-label">First Flavor</span>
-        <div class="combo-trigger" id="combo1Trigger" onclick="toggleDrop(1)">
-          <div class="combo-trigger-dot" id="combo1Dot"></div>
-          <div class="combo-trigger-name" id="combo1Name">Dark Pulse</div>
-          <span class="combo-trigger-chevron">&#9660;</span>
-        </div>
-        <div class="combo-dropdown" id="combo1Drop"></div>
-      </div>
-      <div class="combo-plus" id="comboPlusSign">&#43;</div>
-      <div class="combo-picker">
-        <span class="combo-picker-label">Second Flavor</span>
-        <div class="combo-trigger" id="combo2Trigger" onclick="toggleDrop(2)">
-          <div class="combo-trigger-dot" id="combo2Dot"></div>
-          <div class="combo-trigger-name" id="combo2Name">Blueberry Breeze</div>
-          <span class="combo-trigger-chevron">&#9660;</span>
-        </div>
-        <div class="combo-dropdown" id="combo2Drop"></div>
-      </div>
-    </div>
-    <button class="combo-mix-btn" onclick="blendFlavors()">&#9881; Mix It</button>
-    <div class="combo-canvas-wrap" id="comboCanvasWrap">
-      <canvas id="comboCanvas" width="220" height="220"></canvas>
-    </div>
-    <div class="combo-result-card" id="comboResultCard">
-      <div class="combo-result-eq" id="comboEq"></div>
-      <div class="combo-result-name" id="comboName"></div>
-      <p class="combo-result-desc" id="comboDesc"></p>
-      <button class="combo-wa-btn" onclick="orderCombo()">&#128172; Order This Combo</button>
-    </div>
+  <div class="vote-grid" id="voteGrid"></div>
+  <div class="vote-winner-strip" id="voteWinnerStrip"></div>
+  <div style="text-align:center;margin-top:.8rem;position:relative;z-index:2">
+    <button class="vote-reset" onclick="resetMyVote()">Reset my vote</button>
   </div>
 </section>
+
+
 
 <section id="popularity-section">
   <div class="pop-bg"></div>
@@ -618,6 +972,7 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
   <div class="pop-list" id="popularityList"></div>
 </section>
 
+<hr class="sec-divider">
 <div id="lab-section">
   <div class="lab-grid-bg"></div>
   <div class="lab-header">
@@ -626,8 +981,82 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
     <div class="lab-subtitle">Flavor Analysis &mdash; Batch 9.1</div>
   </div>
   <div class="lab-tubes-grid" id="labTubes"></div>
+  <p class="tube-click-hint">&#128073; Click any tube to add it to the mixer below</p>
+
+  <!-- LAB MIXER PANEL -->
+  <div class="lab-mixer" id="labMixer">
+    <div class="lab-mixer-header">
+      <div class="lab-mixer-eyebrow">&#9879; Experiment Station</div>
+      <h3 class="lab-mixer-title">Flavor Fusion</h3>
+      <p class="lab-mixer-sub">Select two test tubes and combine them</p>
+    </div>
+    <div class="lab-mixer-body">
+      <!-- LEFT TUBE PICKER -->
+      <div class="lm-picker" id="lmPicker1">
+        <div class="lm-picker-label">Tube A</div>
+        <div class="lm-tube-preview" id="lmPreview1">
+          <svg viewBox="0 0 40 130" xmlns="http://www.w3.org/2000/svg" width="40" height="130">
+            <rect x="8" y="0" width="24" height="95" rx="3" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.2)" stroke-width="1.2"/>
+            <rect x="10" y="0" width="24" height="99" rx="2" fill="none"/>
+            <rect x="8" y="95" width="24" height="28" rx="0 0 12 12" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.2)" stroke-width="1.2"/>
+            <rect id="lmFill1" x="10" y="50" width="20" height="70" rx="0 0 10 10" fill="#9B3FE8" opacity=".85" style="transform-origin:bottom;transform:scaleY(0);transition:transform .8s cubic-bezier(.34,1,.64,1)"/>
+            <rect x="11" y="52" width="5" height="60" rx="2" fill="rgba(255,255,255,.15)" id="lmShine1"/>
+          </svg>
+        </div>
+        <div class="lm-flavor-pills" id="lmPills1"></div>
+      </div>
+
+      <!-- CENTER: mix button + beaker -->
+      <div class="lm-center">
+        <button class="lm-mix-btn" id="lmMixBtn" onclick="labMix()">
+          <span id="lmBtnText">&#9881; Mix</span>
+        </button>
+        <div class="lm-beaker-wrap" id="lmBeakerWrap">
+          <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg" width="100" height="130" id="lmBeakerSvg">
+            <defs>
+              <clipPath id="bkClip"><path d="M18,10 L82,10 L95,120 Q95,128 88,128 L12,128 Q5,128 5,120 Z"/></clipPath>
+            </defs>
+            <!-- beaker body -->
+            <path d="M18,10 L82,10 L95,120 Q95,128 88,128 L12,128 Q5,128 5,120 Z" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.22)" stroke-width="1.5"/>
+            <!-- liquid fill (animated) -->
+            <rect id="bkLiquid" x="5" y="128" width="92" height="0" fill="#5BB8F5" opacity=".85" clip-path="url(#bkClip)" style="transition:y .9s ease,height .9s ease"/>
+            <!-- wave on liquid -->
+            <path id="bkWave" d="M5,128 Q25,124 50,128 Q75,132 95,128" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.2" opacity="0"/>
+            <!-- beaker shine -->
+            <rect x="14" y="14" width="6" height="100" rx="3" fill="rgba(255,255,255,.1)" clip-path="url(#bkClip)"/>
+            <!-- measurement lines -->
+            <line x1="16" y1="55" x2="22" y2="55" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+            <line x1="16" y1="80" x2="22" y2="80" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+            <line x1="16" y1="105" x2="22" y2="105" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+            <!-- bubbles (hidden by default) -->
+            <circle id="bk1" cx="30" cy="120" r="3" fill="rgba(255,255,255,.3)" opacity="0"/>
+            <circle id="bk2" cx="55" cy="115" r="2" fill="rgba(255,255,255,.3)" opacity="0"/>
+            <circle id="bk3" cx="70" cy="118" r="2.5" fill="rgba(255,255,255,.3)" opacity="0"/>
+          </svg>
+          <div class="lm-result-name" id="lmResultName"></div>
+          <p class="lm-result-desc" id="lmResultDesc"></p>
+          <button class="lm-order-btn" id="lmOrderBtn" onclick="labOrderCombo()" style="display:none">&#128172; Order This</button>
+        </div>
+      </div>
+
+      <!-- RIGHT TUBE PICKER -->
+      <div class="lm-picker" id="lmPicker2">
+        <div class="lm-picker-label">Tube B</div>
+        <div class="lm-tube-preview" id="lmPreview2">
+          <svg viewBox="0 0 40 130" xmlns="http://www.w3.org/2000/svg" width="40" height="130">
+            <rect x="8" y="0" width="24" height="95" rx="3" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.2)" stroke-width="1.2"/>
+            <rect x="8" y="95" width="24" height="28" rx="0 0 12 12" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.2)" stroke-width="1.2"/>
+            <rect id="lmFill2" x="10" y="50" width="20" height="70" rx="0 0 10 10" fill="#2E9BFF" opacity=".85" style="transform-origin:bottom;transform:scaleY(0);transition:transform .8s cubic-bezier(.34,1,.64,1)"/>
+            <rect x="11" y="52" width="5" height="60" rx="2" fill="rgba(255,255,255,.15)" id="lmShine2"/>
+          </svg>
+        </div>
+        <div class="lm-flavor-pills" id="lmPills2"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
+<hr class="sec-divider">
 <section id="branches-section">
   <div class="branches-bg"></div>
   <div class="branches-grid-lines"></div>
@@ -639,6 +1068,7 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
   <div class="branches-grid" id="branchesGrid"></div>
 </section>
 
+<hr class="sec-divider">
 <section id="quiz-section">
   <div class="quiz-bg"></div>
   <div class="quiz-header">
@@ -660,6 +1090,8 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
     </div>
   </div>
 </section>
+
+<hr class="sec-divider">
 
 <footer id="footer">
   <div class="footer-glow"></div>
@@ -781,7 +1213,7 @@ var F = [
     tags: ["Fresh","Berry","Refreshing"]
   },
   {
-    name: "Strawberry Splash", premium: false, isNew: true,
+    name: "Strawberry Splash", premium: false, isNew: false,
     chemName: "RxO&#8322;-Straw",
     moodWords: ["Vivid","Playful","Sweet"],
     texture: "Juicy Burst",
@@ -889,25 +1321,25 @@ var F = [
 
 var BRANCHES = [
   {
-    name:    "Hayatabad",
+    name:    "Phase 6 Food Street",
     tag:     "Main Branch",
-    address: "Phase 4, Sector F, Street 12\nHayatabad, Peshawar",
-    hours:   "12:00 PM – 12:00 AM",
+    address: "Infront of Harvey's\nPhase 6 Food Street, Hayatabad\nPeshawar",
+    hours:   "4:00 PM – 2:00 AM",
     status:  "open",
     mapUrl:  "#"
   },
   {
-    name:    "University Town",
+    name:    "Nawab Market",
     tag:     "Branch",
-    address: "Main University Road\nUniversity Town, Peshawar",
-    hours:   "12:00 PM – 12:00 AM",
+    address: "Phase 6, Nawab Market\nHayatabad, Peshawar",
+    hours:   "12:00 PM – 11:00 PM",
     status:  "open",
     mapUrl:  "#"
   },
   {
-    name:    "Saddar",
+    name:    "Madina Market",
     tag:     "Branch",
-    address: "Saddar Bazaar\nSaddar, Peshawar",
+    address: "Phase 7, Madina Market\nHayatabad, Peshawar",
     hours:   "12:00 PM – 11:00 PM",
     status:  "open",
     mapUrl:  "#"
@@ -927,19 +1359,19 @@ var BRANCHES = [
 
 /* ── POPULARITY DATA (edit percentages freely) ── */
 var POPULARITY = [
-  { idx: 7, pct: 96 },
-  { idx: 0, pct: 91 },
-  { idx: 2, pct: 85 },
-  { idx: 3, pct: 78 },
-  { idx: 4, pct: 72 },
-  { idx: 6, pct: 65 },
-  { idx: 8, pct: 60 },
-  { idx: 1, pct: 54 },
-  { idx: 5, pct: 48 }
+  { idx: 1, pct: 96 },
+  { idx: 2, pct: 88 },
+  { idx: 0, pct: 82 },
+  { idx: 6, pct: 75 },
+  { idx: 5, pct: 68 },
+  { idx: 7, pct: 61 },
+  { idx: 8, pct: 55 },
+  { idx: 3, pct: 48 },
+  { idx: 4, pct: 41 }
 ];
 
-/* ── TODAYS SPECIAL (Sun=0..Sat=6) ── */
-var DOW_FLAVOR = [2, 0, 3, 7, 4, 8, 1]; // Sun Mon Tue Wed Thu Fri Sat
+/* ── TODAYS SPECIAL — driven by vote winner, fallback to day-of-week ── */
+var DOW_FLAVOR = [2, 0, 3, 7, 4, 8, 1]; // Sun Mon Tue Wed Thu Fri Sat (fallback)
 
 /* ── COMBO NAME GENERATOR ── */
 var COMBO_ADJ = ["Cosmic","Frozen","Electric","Neon","Arctic","Velvet","Crystal","Hyper","Blazing","Shadow"];
@@ -1041,11 +1473,11 @@ for(var i=0;i<F.length;i++){
     fmHTML+='</div>';
     var swatchHTML=''; for(var s=0;s<f.palette.length;s++) swatchHTML+='<div class="mood-swatch" style="background:'+f.palette[s]+'"></div>';
     var mwHTML=''; for(var w=0;w<f.moodWords.length;w++){if(w>0)mwHTML+='<span class="mood-word-sep">&#183;</span>';mwHTML+='<span class="mood-word">'+f.moodWords[w]+'</span>';}
-    var mbHTML='<div class="moodboard"><div class="mood-header">Vibe Board</div><div class="mood-words">'+mwHTML+'</div><div class="mood-texture">Texture &mdash; '+f.texture+'</div><div class="mood-palette">'+swatchHTML+'</div></div>';
+    var mbHTML='<div class="moodboard"><div class="mood-header">Vibe Board</div><div class="mood-words">'+mwHTML+'</div><div class="mood-texture">Texture &mdash; '+f.texture+'</div><div class="mood-palette">'+swatchHTML+'<button class="flavor-share-btn" onclick="copyFlavorLink('+idx+',this)">&#128279; Copy Link</button></div></div>';
     var num=idx<9?'0'+(idx+1):''+(idx+1);
     var bgStyle='background:radial-gradient(ellipse 55% 55% at '+(eo?'65%':'35%')+' 50%,'+f.glow+' 0%,transparent 65%),linear-gradient(180deg,var(--navy) 0%,'+f.bg+' 50%,var(--navy) 100%)';
     var cupInner=fowHTML+(f.isNew?newHTML:'')+'<div class="cup-wrap">'+cupSVG(f,idx)+'</div>';
-    sec.innerHTML='<div class="fsec-bg" style="'+bgStyle+'"></div><div class="aura-pulse"></div><div class="sec-watermark">'+f.name+'</div><div class="fsec-card" data-i="'+idx+'"><div class="cup-pour-outer">'+cupInner+'</div><div class="finfo"><p class="fnum">'+num+' <span style="opacity:.4">/</span> 09</p>'+premHTML+'<h2 class="fname">'+f.name+'</h2><div class="ing-row">'+tagsHTML+'</div><p class="fdesc">'+f.desc+'</p>'+statsHTML+fmHTML+mbHTML+'</div></div>';
+    sec.innerHTML='<div class="fsec-bg" style="'+bgStyle+'"></div><div class="aura-pulse"></div><div class="sec-watermark">'+f.name+'</div><div class="fsec-card" data-i="'+idx+'"><div class="cup-pour-outer">'+cupInner+'</div><div class="finfo"><p class="fnum">'+num+' <span style="opacity:.4">/</span> 09</p>'+premHTML+'<h2 class="fname">'+f.name+'</h2><div class="ing-row">'+tagsHTML+'</div><p class="fdesc">'+f.desc+'</p>'+statsHTML+fmHTML+mbHTML+'<button class="flavor-share-btn" onclick="copyFlavorLink('+idx+',this)">&#128279; Copy Link</button></div></div>';
     for(var p=0;p<6;p++){var pt=document.createElement('div'),sz=Math.random()*14+5;pt.className='iparticle';pt.style.cssText='left:'+(Math.random()*90+5)+'%;bottom:-20px;animation-duration:'+(Math.random()*11+6)+'s;animation-delay:'+(Math.random()*9)+'s;';pt.innerHTML='<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="'+f.color+'" stroke-width="1" opacity=".55"/><path d="M8 2v12M2 8h12M4 4l8 8M12 4L4 12" stroke="'+f.color+'" stroke-width=".7" opacity=".4"/></svg>';sec.appendChild(pt);}
     fWrap.appendChild(sec);
     var d=document.createElement('button'); d.className='dot'; d.title=f.name; d.style.setProperty('--dot-c',f.color);
@@ -1069,11 +1501,14 @@ for(var i=0;i<F.length;i++){
   }
 })();
 
-/* ── TODAY'S SPECIAL ── */
-(function(){
+/* ── TODAY'S SPECIAL — driven by vote winner, fallback to day-of-week ── */
+function renderTodaysSpecial(){
   var dow=new Date().getDay();
   var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var fi=DOW_FLAVOR[dow], f=F[fi];
+  var votes=getVotes(), winnerIdx=DOW_FLAVOR[dow];
+  var maxV=0;
+  for(var vi=0;vi<F.length;vi++){if((votes[vi]||0)>maxV){maxV=votes[vi]||0;winnerIdx=vi;}}
+  var fi=winnerIdx, f=F[fi];
   var el=document.getElementById('todays-special'); if(!el) return;
   el.style.borderTop='1px solid '+f.border;
   el.innerHTML='<span class="special-label">Today\'s Special</span>'
@@ -1082,7 +1517,8 @@ for(var i=0;i<F.length;i++){
     +'<span class="special-badge" style="color:'+f.color+';background:'+f.dim+';border-color:'+f.border+'">Featured</span>'
     +'<span class="special-arrow">&#8594;</span>';
   el.onclick=function(){document.getElementById('f'+fi).scrollIntoView({behavior:'smooth'});};
-})();
+}
+renderTodaysSpecial();
 
 
 
@@ -1209,137 +1645,6 @@ function updateCountdowns(){
   },{threshold:.3});
   popObs.observe(list);
 })();
-
-/* ── COMBO MIXER ── */
-var comboSel=[0,1]; // currently selected indices for picker 1 and 2
-
-function buildDrop(pickerN){
-  var drop=document.getElementById('combo'+pickerN+'Drop'); if(!drop) return;
-  drop.innerHTML='';
-  for(var ci=0;ci<F.length;ci++){
-    (function(f,idx,pn){
-      var row=document.createElement('div');
-      row.className='combo-option'+(comboSel[pn-1]===idx?' selected':'');
-      row.innerHTML='<div class="combo-option-dot" style="background:'+f.color+';box-shadow:0 0 8px '+f.glow+'"></div>'
-        +'<span class="combo-option-emoji">'+f.emoji+'</span>'
-        +'<span class="combo-option-name" style="color:'+f.color+';text-shadow:0 0 16px '+f.glow+'">'+f.name+'</span>'
-        +'<span class="combo-option-check" style="color:'+f.color+'">&#10003;</span>';
-      row.onclick=function(){
-        comboSel[pn-1]=idx;
-        updateTrigger(pn);
-        closeDrop(pn);
-        buildDrop(pn); // refresh checkmarks
-        // animate plus sign briefly
-        var plus=document.getElementById('comboPlusSign');
-        plus.classList.add('active');
-        setTimeout(function(){plus.classList.remove('active');},400);
-      };
-      drop.appendChild(row);
-    })(F[ci],ci,pickerN);
-  }
-}
-
-function updateTrigger(n){
-  var f=F[comboSel[n-1]];
-  document.getElementById('combo'+n+'Dot').style.background=f.color;
-  document.getElementById('combo'+n+'Dot').style.boxShadow='0 0 10px '+f.glow;
-  document.getElementById('combo'+n+'Name').textContent=f.name;
-  document.getElementById('combo'+n+'Name').style.color=f.color;
-  document.getElementById('combo'+n+'Name').style.textShadow='0 0 20px '+f.glow;
-  document.getElementById('combo'+n+'Trigger').style.borderColor=f.border;
-  document.getElementById('combo'+n+'Trigger').style.boxShadow='0 0 18px '+f.glow.replace(/[\d.]+\)$/,'0.12)');
-}
-
-function toggleDrop(n){
-  var t=document.getElementById('combo'+n+'Trigger');
-  var d=document.getElementById('combo'+n+'Drop');
-  var other=n===1?2:1;
-  closeDrop(other);
-  t.classList.toggle('open');
-  d.classList.toggle('open');
-  if(d.classList.contains('open')) buildDrop(n);
-}
-function closeDrop(n){
-  var t=document.getElementById('combo'+n+'Trigger');
-  var d=document.getElementById('combo'+n+'Drop');
-  if(t) t.classList.remove('open');
-  if(d) d.classList.remove('open');
-}
-
-// close dropdowns on outside click
-document.addEventListener('click',function(e){
-  if(!e.target.closest('.combo-picker')){closeDrop(1);closeDrop(2);}
-});
-
-// init triggers on load
-updateTrigger(1); updateTrigger(2);
-
-var comboAnimId=null;
-function blendFlavors(){
-  var i1=comboSel[0];
-  var i2=comboSel[1];
-  var f1=F[i1],f2=F[i2];
-  var wrap=document.getElementById('comboCanvasWrap'),canvas=document.getElementById('comboCanvas'),card=document.getElementById('comboResultCard');
-  wrap.classList.add('show'); card.classList.remove('show');
-  if(comboAnimId) cancelAnimationFrame(comboAnimId);
-  var ctx=canvas.getContext('2d'),t=0;
-  var c1=f1.color,c2=f2.color;
-  function hexToRgb(h){return{r:parseInt(h.slice(1,3),16),g:parseInt(h.slice(3,5),16),b:parseInt(h.slice(5,7),16)};}
-  var rgb1=hexToRgb(c1),rgb2=hexToRgb(c2);
-  function lerp(a,b,x){return Math.round(a+(b-a)*x);}
-  function drawFrame(){
-    ctx.clearRect(0,0,220,220);
-    ctx.save(); ctx.beginPath(); ctx.arc(110,110,108,0,Math.PI*2); ctx.clip();
-    var mix=(.5+.5*Math.sin(t*.8));
-    var mr=lerp(rgb1.r,rgb2.r,mix),mg=lerp(rgb1.g,rgb2.g,mix),mb=lerp(rgb1.b,rgb2.b,mix);
-    var grad=ctx.createRadialGradient(110,110,0,110,110,110);
-    grad.addColorStop(0,'rgba('+mr+','+mg+','+mb+',1)');
-    grad.addColorStop(1,'rgba('+Math.round(mr*.5)+','+Math.round(mg*.5)+','+Math.round(mb*.5)+',1)');
-    ctx.fillStyle=grad; ctx.fillRect(0,0,220,220);
-    for(var sw=0;sw<6;sw++){
-      var ang=t*.6+sw*Math.PI/3, r=55+20*Math.sin(t*.4+sw);
-      var x=110+r*Math.cos(ang),y=110+r*Math.sin(ang);
-      ctx.beginPath(); ctx.arc(x,y,28+12*Math.sin(t+sw),0,Math.PI*2);
-      var lmx=(sw%2===0)?mix:1-mix;
-      var lr=lerp(rgb2.r,rgb1.r,lmx),lg=lerp(rgb2.g,rgb1.g,lmx),lb=lerp(rgb2.b,rgb1.b,lmx);
-      ctx.fillStyle='rgba('+lr+','+lg+','+lb+',.35)'; ctx.fill();
-    }
-    ctx.restore();
-    ctx.font='bold 14px Nunito,sans-serif'; ctx.fillStyle='rgba(255,255,255,.55)'; ctx.textAlign='center';
-    ctx.fillText(f1.emoji,80,118); ctx.fillText(f2.emoji,140,118);
-    t+=0.04;
-  }
-  var frames=0;
-  function animate(){
-    drawFrame(); frames++;
-    if(frames<90) comboAnimId=requestAnimationFrame(animate);
-    else showComboResult(f1,f2,rgb1,rgb2);
-  }
-  animate();
-}
-function showComboResult(f1,f2,rgb1,rgb2){
-  var seedA=f1.name.length+f2.name.length;
-  var seedB=(f1.color.charCodeAt(1)+f2.color.charCodeAt(1))%10;
-  var adj=COMBO_ADJ[(seedA+seedB)%COMBO_ADJ.length];
-  var noun=COMBO_NOUN[(seedA*2+seedB+3)%COMBO_NOUN.length];
-  var comboName=adj+' '+noun;
-  var mr=Math.round((rgb1.r+rgb2.r)/2),mg=Math.round((rgb1.g+rgb2.g)/2),mb=Math.round((rgb1.b+rgb2.b)/2);
-  var blendColor='rgb('+mr+','+mg+','+mb+')';
-  var descs=['A fusion the lab never expected. Dangerously smooth, wildly good.','Two worlds colliding in a single cup. Bold, beautiful, unforgettable.','The ultimate crossover. Equal parts ice, equal parts magic.','Science + art = this. A flavor that defies all expectations.','Sweet meets sharp. The combo that changes everything.'];
-  var descIdx=(f1.name.length+f2.name.length)%descs.length;
-  document.getElementById('comboEq').textContent=f1.name+' \u00d7 '+f2.name;
-  var nameEl=document.getElementById('comboName'); nameEl.textContent=comboName; nameEl.style.color=blendColor; nameEl.style.textShadow='0 0 40px '+blendColor;
-  document.getElementById('comboDesc').textContent=descs[descIdx];
-  document.getElementById('comboResultCard').classList.add('show');
-  document.getElementById('comboResultCard').dataset.f1=f1.name;
-  document.getElementById('comboResultCard').dataset.f2=f2.name;
-  document.getElementById('comboResultCard').dataset.cname=comboName;
-}
-function orderCombo(){
-  var card=document.getElementById('comboResultCard');
-  var msg=encodeURIComponent('Hi SlushLab! I want to order the combo: '+card.dataset.f1+' + '+card.dataset.f2+' (The '+card.dataset.cname+') \u2603');
-  window.open('https://wa.me/?text='+msg,'_blank');
-}
 
 /* ── ORDER DRAWER ── */
 var orderQty=1, orderFlavor=0, orderSize='Small';
@@ -1512,7 +1817,7 @@ var obs=new IntersectionObserver(function(entries){
       e.target.classList.remove('in');
     }
   });
-},{threshold:.3});
+},{threshold:.1,rootMargin:'0px 0px -5% 0px'});
 cards.forEach(function(c){obs.observe(c);});
 
 var heroObs=new IntersectionObserver(function(e){
@@ -1593,6 +1898,127 @@ for(var ci=0;ci<22;ci++){
   cWrap.appendChild(el);
 }
 
+/* ── FLAVOR VOTING SYSTEM ── */
+var VOTE_KEY      = 'slushlab_votes_v1';
+var VOTED_KEY     = 'slushlab_my_vote_v1';
+var VOTED_DATE_KEY= 'slushlab_vote_date_v1';
+
+function getVotes(){
+  try{ return JSON.parse(localStorage.getItem(VOTE_KEY)||'{}'); }
+  catch(e){ return {}; }
+}
+function saveVotes(v){ localStorage.setItem(VOTE_KEY, JSON.stringify(v)); }
+function getMyVote(){ return localStorage.getItem(VOTED_KEY); }
+function getVoteDate(){ return localStorage.getItem(VOTED_DATE_KEY); }
+
+function castVote(idx){
+  var today = new Date().toDateString();
+  if(getMyVote() !== null && getVoteDate() === today){
+    // already voted today — unvote first if clicking own vote
+    if(parseInt(getMyVote()) === idx){
+      var votes = getVotes();
+      votes[idx] = Math.max(0,(votes[idx]||0)-1);
+      saveVotes(votes);
+      localStorage.removeItem(VOTED_KEY);
+      localStorage.removeItem(VOTED_DATE_KEY);
+    } else {
+      // swap vote
+      var votes = getVotes();
+      var prev = parseInt(getMyVote());
+      votes[prev] = Math.max(0,(votes[prev]||0)-1);
+      votes[idx]  = (votes[idx]||0)+1;
+      saveVotes(votes);
+      localStorage.setItem(VOTED_KEY, ''+idx);
+      localStorage.setItem(VOTED_DATE_KEY, today);
+    }
+  } else {
+    var votes = getVotes();
+    votes[idx] = (votes[idx]||0)+1;
+    saveVotes(votes);
+    localStorage.setItem(VOTED_KEY, ''+idx);
+    localStorage.setItem(VOTED_DATE_KEY, today);
+  }
+  renderVoteGrid();
+  renderTodaysSpecial();
+renderVoteGrid();
+}
+
+function resetMyVote(){
+  var myVote = getMyVote();
+  if(myVote === null) return;
+  var idx = parseInt(myVote);
+  var votes = getVotes();
+  votes[idx] = Math.max(0,(votes[idx]||0)-1);
+  saveVotes(votes);
+  localStorage.removeItem(VOTED_KEY);
+  localStorage.removeItem(VOTED_DATE_KEY);
+  renderVoteGrid();
+  renderTodaysSpecial();
+}
+
+function renderVoteGrid(){
+  var grid = document.getElementById('voteGrid');
+  if(!grid) return;
+  var votes  = getVotes();
+  var myVote = getMyVote();
+  var today  = new Date().toDateString();
+  var myVoteToday = (getVoteDate() === new Date().toDateString()) ? myVote : null;
+
+  // find total + winner
+  var total = 0, maxV = 0, winnerIdx = -1;
+  for(var vi=0;vi<F.length;vi++){
+    var v=(votes[vi]||0); total+=v;
+    if(v>maxV){maxV=v;winnerIdx=vi;}
+  }
+
+  // sort by votes descending for display
+  var sorted = [];
+  for(var si=0;si<F.length;si++) sorted.push({idx:si,v:votes[si]||0});
+  sorted.sort(function(a,b){return b.v-a.v;});
+
+  // build all cards
+  var html='';
+  for(var ri=0;ri<sorted.length;ri++){
+    var entry=sorted[ri], f=F[entry.idx];
+    var isVoted   = myVoteToday!==null && parseInt(myVoteToday)===entry.idx;
+    var isWinner  = entry.idx===winnerIdx && maxV>0;
+    var pct       = total>0 ? Math.round(entry.v/total*100) : 0;
+    var votedCls  = isVoted  ? ' voted'  : '';
+    var winCls    = isWinner ? ' winner' : '';
+    var crownHTML = isWinner ? '<span style="font-size:.9rem;position:absolute;top:-8px;right:8px;">&#128081;</span>' : '';
+    html += '<div class="vote-card'+votedCls+winCls+'" style="--vc:'+f.color+';--vg:'+f.glow+'">'
+      + crownHTML
+      + '<div class="vote-emoji">'+f.emoji+'</div>'
+      + '<div class="vote-info">'
+      +   '<div class="vote-fname" style="color:'+f.color+'">'+f.name+'</div>'
+      +   '<div class="vote-bar-track"><div class="vote-bar-fill" style="width:'+pct+'%"></div></div>'
+      +   '<div class="vote-count">'+entry.v+' vote'+(entry.v===1?'':'s')+' &middot; '+pct+'%</div>'
+      + '</div>'
+      + '<button class="vote-btn" onclick="castVote('+entry.idx+')" title="'+(isVoted?'Remove vote':'Vote for this flavor')+'">'
+      +   (isVoted ? '&#10003;' : '&#9825;')
+      + '</button>'
+      + '</div>';
+  }
+  grid.innerHTML = html;
+
+  // winner strip
+  var strip = document.getElementById('voteWinnerStrip');
+  if(strip){
+    if(winnerIdx>=0 && maxV>0){
+      strip.innerHTML = '&#128081; <b style="color:'+F[winnerIdx].color+'">'+F[winnerIdx].name+'</b> is Flavor of the Week &mdash; <b>'+maxV+' vote'+(maxV===1?'':'s')+'</b>';
+    } else {
+      strip.innerHTML = 'No votes yet &mdash; be the first!';
+    }
+  }
+
+  var subEl = document.getElementById('voteSubText');
+  if(subEl && myVoteToday!==null){
+    subEl.innerHTML = 'You voted for <b style="color:'+F[parseInt(myVoteToday)].color+'">'+F[parseInt(myVoteToday)].name+'</b> &mdash; vote again tomorrow or swap now';
+  } else if(subEl){
+    subEl.innerHTML = 'Vote for your favourite &mdash; top voted becomes <b>Featured</b>';
+  }
+}
+
 /* ── INTRO LOADER ── */
 (function(){
   var fill=document.getElementById('introFill'),intro=document.getElementById('intro');
@@ -1604,6 +2030,529 @@ for(var ci=0;ci<22;ci++){
     if(prog>=100) setTimeout(function(){intro.classList.add('gone');},280);
   },60);
 })();
+
+/* ── MOBILE HAMBURGER MENU ── */
+(function colorMobNav(){
+  var items = document.querySelectorAll('.mob-nav-item');
+  var colors = ['#5BB8F5','#9B3FE8','#F52060','#FF5500','#F5C200','#4CBF24'];
+  items.forEach(function(el, i){
+    var col = colors[i % colors.length];
+    el.style.color = col;
+    el.style.setProperty('--mc', col);
+  });
+})();
+
+function toggleMobileMenu(){
+  var burger = document.getElementById('burger');
+  var menu   = document.getElementById('mobile-menu');
+  burger.classList.toggle('open');
+  menu.classList.toggle('open');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+function closeMobileMenu(){
+  document.getElementById('burger').classList.remove('open');
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── KEYBOARD NAVIGATION (arrow keys) ── */
+(function(){
+  var allSections = [];
+  document.querySelectorAll('.fsec').forEach(function(s){ allSections.push(s); });
+  document.addEventListener('keydown', function(e){
+    if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    var key = e.key;
+    if(key !== 'ArrowDown' && key !== 'ArrowUp') return;
+    e.preventDefault();
+    // find which section is most visible
+    var best = -1, bestVis = 0;
+    allSections.forEach(function(sec, i){
+      var r = sec.getBoundingClientRect();
+      var vis = Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0));
+      if(vis > bestVis){ bestVis = vis; best = i; }
+    });
+    var next = key === 'ArrowDown' ? best + 1 : best - 1;
+    if(next >= 0 && next < allSections.length){
+      allSections[next].scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+})();
+
+/* ── COPY FLAVOR LINK ── */
+function copyFlavorLink(idx, btn){
+  var url = window.location.origin + window.location.pathname + '#f' + idx;
+  navigator.clipboard.writeText(url).then(function(){
+    btn.classList.add('copied');
+    btn.innerHTML = '&#10003; Copied!';
+    setTimeout(function(){
+      btn.classList.remove('copied');
+      btn.innerHTML = '&#128279; Copy Link';
+    }, 2200);
+  }).catch(function(){
+    // fallback for http / older browsers
+    var ta = document.createElement('textarea');
+    ta.value = url; ta.style.cssText = 'position:fixed;top:-9999px';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.classList.add('copied');
+    btn.innerHTML = '&#10003; Copied!';
+    setTimeout(function(){ btn.classList.remove('copied'); btn.innerHTML = '&#128279; Copy Link'; }, 2200);
+  });
+}
+
+/* ── SCROLL TO HASH ON LOAD ── */
+(function(){
+  var hash = window.location.hash;
+  if(hash && hash.match(/^#f\d$/)){
+    setTimeout(function(){
+      var el = document.querySelector(hash);
+      if(el) el.scrollIntoView();
+    }, 900);
+  }
+})();
+
+
+/* ── STAGGERED ENTRY: popularity rows + vote cards ── */
+(function staggerObserve(){
+  function makeObs(cls){
+    return new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting) e.target.classList.add('visible');
+      });
+    },{threshold:.15});
+  }
+  var popObs  = makeObs('pop-row');
+  var voteObs = makeObs('vote-card');
+  function observeAll(){
+    document.querySelectorAll('.pop-row').forEach(function(r){
+      var rect = r.getBoundingClientRect();
+      if(rect.top < window.innerHeight && rect.bottom > 0) r.classList.add('visible');
+      else popObs.observe(r);
+    });
+    document.querySelectorAll('.vote-card').forEach(function(r){
+      var rect = r.getBoundingClientRect();
+      if(rect.top < window.innerHeight && rect.bottom > 0) r.classList.add('visible');
+      else voteObs.observe(r);
+    });
+  }
+  // initial observe + re-observe after vote grid re-renders
+  observeAll();
+  var origRenderVote = renderVoteGrid;
+  renderVoteGrid = function(){
+    origRenderVote();
+    setTimeout(observeAll, 50);
+  };
+})();
+
+/* ── ACTIVE NAV LINK on scroll ── */
+(function activeNav(){
+  var sections = [
+    {id:'hero',           href:'#hero'},
+    {id:'flavors',        href:'#flavors'},
+    {id:'vote-section',   href:'#vote-section'},
+    {id:'lab-section',    href:'#lab-section'},
+    {id:'branches-section',href:'#branches-section'},
+    {id:'quiz-section',   href:'#quiz-section'},
+  ];
+  var links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', function(){
+    var scrollY = window.scrollY + window.innerHeight * 0.4;
+    var current = 'hero';
+    sections.forEach(function(s){
+      var el = document.getElementById(s.id);
+      if(el && el.offsetTop <= scrollY) current = s.id;
+    });
+    links.forEach(function(a){
+      var href = a.getAttribute('href').replace('#','');
+      a.classList.toggle('nav-active', href === current);
+    });
+  },{passive:true});
+})();
+
+/* ── SWIPE LEFT/RIGHT on combo dropdowns (mobile) ── */
+(function comboSwipe(){
+  var picker1 = document.getElementById('combo1Trigger');
+  var picker2 = document.getElementById('combo2Trigger');
+  if(!picker1 || !picker2) return;
+  [picker1, picker2].forEach(function(el, n){
+    var tx = null;
+    el.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;},{passive:true});
+    el.addEventListener('touchend',function(e){
+      if(tx===null) return;
+      var dx = e.changedTouches[0].clientX - tx;
+      if(Math.abs(dx)>40){
+        var pn = n+1;
+        var cur = comboSel[pn-1];
+        var next = ((cur + (dx<0?1:-1)) + F.length) % F.length;
+        comboSel[pn-1] = next;
+        updateTrigger(pn);
+        buildDrop(pn);
+      }
+      tx=null;
+    },{passive:true});
+  });
+})();
+
+/* ── PALETTE SWATCH TITLES (hex tooltip) ── */
+(function swatchTitles(){
+  // runs after cards are built — wait briefly
+  setTimeout(function(){
+    document.querySelectorAll('.mood-swatch').forEach(function(el){
+      var bg = el.style.background;
+      if(bg && !el.title) el.title = bg;
+    });
+  }, 1200);
+})();
+
+/* ── POPULARITY BARS — re-trigger observer after build ── */
+(function reobservePop(){
+  var list = document.getElementById('popularityList');
+  if(!list) return;
+  var o = new IntersectionObserver(function(entries){
+    if(entries[0].isIntersecting){
+      list.querySelectorAll('.pop-bar-fill').forEach(function(b){
+        // extract the --pw value from inline style
+        var m = b.getAttribute('style') && b.getAttribute('style').match(/--pw:([^;%]+%)/);
+        if(m) b.style.width = m[1];
+      });
+    }
+  },{threshold:.2});
+  o.observe(list);
+})();
+
+
+/* ── LAB MIXER JS ── */
+var labSel = [0, 1]; // indices of selected flavors A and B
+var labComboResult = null;
+
+var LAB_SAME_MSGS = [
+  "That's just a double dose. The lab respects the commitment.",
+  "A purist. Why dilute perfection?",
+  "Bold. The lab calls this 'concentrated excellence'.",
+  "Two of the same? You clearly know what you want.",
+  "Maximum loyalty achieved. The lab salutes you."
+];
+
+var LAB_COMBO_ADJ  = ["Cosmic","Frozen","Electric","Neon","Arctic","Velvet","Crystal","Hyper","Blazing","Shadow"];
+var LAB_COMBO_NOUN = ["Storm","Wave","Rush","Dream","Surge","Pulse","Drift","Burst","Echo","Fusion"];
+
+function buildLabPills(pickerN) {
+  var container = document.getElementById('lmPills' + pickerN);
+  if (!container) return;
+  container.innerHTML = '';
+  for (var pi = 0; pi < F.length; pi++) {
+    (function(f, idx, pn) {
+      var btn = document.createElement('button');
+      btn.className = 'lm-pill' + (labSel[pn-1] === idx ? ' sel' : '');
+      btn.textContent = f.name;
+      if (labSel[pn-1] === idx) {
+        btn.style.background  = f.color;
+        btn.style.borderColor = f.color;
+      } else {
+        btn.style.color = f.color;
+        btn.style.borderColor = f.border;
+      }
+      btn.onclick = function() {
+        labSel[pn-1] = idx;
+        updateLabTube(pn);
+        buildLabPills(pn);
+        resetBeaker();
+      };
+      container.appendChild(btn);
+    })(F[pi], pi, pickerN);
+  }
+}
+
+function updateLabTube(n) {
+  var f    = F[labSel[n-1]];
+  var fill = document.getElementById('lmFill' + n);
+  if (!fill) return;
+  fill.setAttribute('fill', f.color);
+  // animate in
+  fill.style.transform = 'scaleY(0)';
+  setTimeout(function() { fill.style.transform = 'scaleY(1)'; }, 40);
+}
+
+function resetBeaker() {
+  var liq  = document.getElementById('bkLiquid');
+  var wave = document.getElementById('bkWave');
+  var name = document.getElementById('lmResultName');
+  var desc = document.getElementById('lmResultDesc');
+  var ord  = document.getElementById('lmOrderBtn');
+  if (liq)  { liq.setAttribute('y', '128'); liq.setAttribute('height', '0'); }
+  if (wave) { wave.setAttribute('opacity', '0'); }
+  if (name) { name.textContent = ''; name.style.color = ''; }
+  if (desc) { desc.textContent = ''; }
+  if (ord)  { ord.style.display = 'none'; }
+  labComboResult = null;
+  // reset bubbles
+  ['bk1','bk2','bk3'].forEach(function(id) {
+    var b = document.getElementById(id);
+    if (b) b.setAttribute('opacity', '0');
+  });
+}
+
+function labMix() {
+  var i1 = labSel[0], i2 = labSel[1];
+  var f1 = F[i1],     f2 = F[i2];
+  var btn = document.getElementById('lmMixBtn');
+  if (btn) { btn.disabled = true; }
+
+  // reset first
+  resetBeaker();
+
+  // play pour sound
+  playFizzCrunch(f1.color);
+
+  // animate tubes tilting (CSS transforms via inline)
+  var t1 = document.getElementById('lmPreview1');
+  var t2 = document.getElementById('lmPreview2');
+  if (t1) { t1.style.transform = 'rotate(-35deg) translateY(30px)'; t1.style.transition = 'transform .6s cubic-bezier(.34,1.56,.64,1)'; }
+  if (t2) { t2.style.transform = 'rotate(35deg) translateY(30px)';  t2.style.transition = 'transform .6s cubic-bezier(.34,1.56,.64,1)'; }
+
+  setTimeout(function() {
+    // fill beaker with blended color
+    var r1 = parseInt(f1.color.slice(1,3),16), g1 = parseInt(f1.color.slice(3,5),16), b1 = parseInt(f1.color.slice(5,7),16);
+    var r2 = parseInt(f2.color.slice(1,3),16), g2 = parseInt(f2.color.slice(3,5),16), b2 = parseInt(f2.color.slice(5,7),16);
+    var mr = Math.round((r1+r2)/2), mg = Math.round((g1+g2)/2), mb = Math.round((b1+b2)/2);
+    var blendColor = 'rgb('+mr+','+mg+','+mb+')';
+
+    var liq = document.getElementById('bkLiquid');
+    if (liq) {
+      liq.setAttribute('fill', blendColor);
+      liq.setAttribute('y', '38');
+      liq.setAttribute('height', '90');
+    }
+    var wave = document.getElementById('bkWave');
+    if (wave) {
+      wave.setAttribute('stroke', blendColor);
+      wave.setAttribute('d', 'M5,40 Q25,36 50,40 Q75,44 95,40');
+      wave.setAttribute('opacity', '0.6');
+    }
+
+    // animate bubbles rising
+    var bubIds = ['bk1','bk2','bk3'];
+    bubIds.forEach(function(id, bi) {
+      setTimeout(function() {
+        var b = document.getElementById(id);
+        if (!b) return;
+        b.setAttribute('fill', 'rgba(255,255,255,.45)');
+        b.setAttribute('opacity', '0.7');
+        var startY = 110 + bi * 4;
+        var anim = b.querySelector('animate') || document.createElementNS('http://www.w3.org/2000/svg','animate');
+        anim.setAttribute('attributeName','cy');
+        anim.setAttribute('values', startY + ';' + (startY - 70) + ';' + startY);
+        anim.setAttribute('dur', (1.4 + bi * 0.4) + 's');
+        anim.setAttribute('repeatCount', 'indefinite');
+        if (!b.querySelector('animate')) b.appendChild(anim);
+        else anim.beginElement && anim.beginElement();
+      }, bi * 200);
+    });
+    playFizzCrunch(f2.color);
+
+    // restore tubes
+    setTimeout(function() {
+      if (t1) t1.style.transform = '';
+      if (t2) t2.style.transform = '';
+    }, 300);
+
+    // show result
+    setTimeout(function() {
+      var name = document.getElementById('lmResultName');
+      var desc = document.getElementById('lmResultDesc');
+      var ord  = document.getElementById('lmOrderBtn');
+      if (btn) btn.disabled = false;
+
+      if (i1 === i2) {
+        // same flavor — funny message
+        var msg = LAB_SAME_MSGS[f1.name.length % LAB_SAME_MSGS.length];
+        if (name) {
+          name.textContent = 'Double ' + f1.name;
+          name.style.color = f1.color;
+          name.classList.add('same');
+          setTimeout(function() { name.classList.remove('same'); }, 1500);
+        }
+        if (desc) desc.textContent = msg;
+        labComboResult = { f1: f1.name, f2: f2.name, cname: 'Double ' + f1.name };
+      } else {
+        var seedA = f1.name.length + f2.name.length;
+        var seedB = (f1.color.charCodeAt(1) + f2.color.charCodeAt(1)) % 10;
+        var adj   = LAB_COMBO_ADJ[(seedA + seedB) % LAB_COMBO_ADJ.length];
+        var noun  = LAB_COMBO_NOUN[(seedA*2 + seedB + 3) % LAB_COMBO_NOUN.length];
+        var cname = adj + ' ' + noun;
+        var descs = [
+          'A fusion the lab never expected. Dangerously smooth, wildly good.',
+          'Two worlds colliding in a single cup. Bold, beautiful, unforgettable.',
+          'The ultimate crossover. Equal parts ice, equal parts magic.',
+          'Science + art = this. A flavor that defies all expectations.',
+          'Sweet meets sharp. The combo that changes everything.'
+        ];
+        var di = (f1.name.length + f2.name.length) % descs.length;
+        if (name) {
+          name.textContent = cname;
+          name.style.color = blendColor;
+          name.style.textShadow = '0 0 30px ' + blendColor;
+        }
+        if (desc) desc.textContent = descs[di];
+        labComboResult = { f1: f1.name, f2: f2.name, cname: cname };
+      }
+      if (ord) ord.style.display = 'inline-block';
+    }, 1000);
+  }, 650);
+}
+
+function labOrderCombo() {
+  if (!labComboResult) return;
+  var msg = 'Hi SlushLab! I would like to order the combo: '
+    + labComboResult.f1 + ' + ' + labComboResult.f2
+    + ' (The ' + labComboResult.cname + ') ☃';
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+/* ── INIT LAB MIXER ── */
+(function initLabMixer() {
+  buildLabPills(1);
+  buildLabPills(2);
+  updateLabTube(1);
+  updateLabTube(2);
+})();
+
+
+
+
+/* ── HIDE SCROLL HINT ON FIRST SCROLL ── */
+(function(){
+  var hint = document.querySelector('.scroll-hint');
+  if(!hint) return;
+  var done = false;
+  window.addEventListener('scroll', function(){
+    if(!done && window.scrollY > 60){
+      done = true;
+      hint.classList.add('hidden');
+    }
+  },{passive:true});
+})();
+
+/* ── TUBE CLICK → SELECT FOR MIXER ── */
+(function tubeClickSelect(){
+  // wait until tubes are built
+  setTimeout(function(){
+    var cols = document.querySelectorAll('.tube-col');
+    cols.forEach(function(col, i){
+      col.addEventListener('click', function(){
+        var cur1 = labSel[0], cur2 = labSel[1];
+        if(i === cur1){
+          // already A — do nothing
+          return;
+        } else if(i === cur2){
+          // already B — do nothing
+          return;
+        } else if(cur1 === cur2){
+          // both same — replace A
+          labSel[0] = i;
+        } else {
+          // replace whichever is further from click (pick B slot)
+          labSel[1] = i;
+        }
+        updateLabTube(1); updateLabTube(2);
+        buildLabPills(1); buildLabPills(2);
+        resetBeaker();
+        highlightTubeCols();
+        // scroll to mixer
+        var mixer = document.getElementById('labMixer');
+        if(mixer) setTimeout(function(){ mixer.scrollIntoView({behavior:'smooth',block:'center'}); }, 200);
+      });
+    });
+    highlightTubeCols();
+  }, 800);
+})();
+
+function highlightTubeCols(){
+  var cols = document.querySelectorAll('.tube-col');
+  cols.forEach(function(col, i){
+    col.classList.remove('selected-a','selected-b');
+    col.removeAttribute('data-label');
+    if(i === labSel[0]){ col.classList.add('selected-a'); col.setAttribute('data-label','Tube A'); }
+    if(i === labSel[1]){ col.classList.add('selected-b'); col.setAttribute('data-label','Tube B'); }
+  });
+}
+
+/* ── BEAKER GLOW on mix ── */
+var origLabMix = labMix;
+labMix = function(){
+  origLabMix();
+  var f1 = F[labSel[0]], f2 = F[labSel[1]];
+  var r1=parseInt(f1.color.slice(1,3),16),g1=parseInt(f1.color.slice(3,5),16),b1=parseInt(f1.color.slice(5,7),16);
+  var r2=parseInt(f2.color.slice(1,3),16),g2=parseInt(f2.color.slice(3,5),16),b2=parseInt(f2.color.slice(5,7),16);
+  var mr=Math.round((r1+r2)/2),mg=Math.round((g1+g2)/2),mb=Math.round((b1+b2)/2);
+  var svg = document.getElementById('lmBeakerSvg');
+  if(svg){
+    svg.style.setProperty('--bk-glow','rgba('+mr+','+mg+','+mb+',.45)');
+    setTimeout(function(){ svg.classList.add('poured'); }, 700);
+  }
+};
+
+/* ── VOTING: reset beaker on mix also resets glow ── */
+var origResetBeaker = resetBeaker;
+resetBeaker = function(){
+  origResetBeaker();
+  var svg = document.getElementById('lmBeakerSvg');
+  if(svg) svg.classList.remove('poured');
+};
+
+/* ── POPULARITY ROWS: click scrolls to that flavor ── */
+(function popClick(){
+  setTimeout(function(){
+    document.querySelectorAll('.pop-row').forEach(function(row, ri){
+      var idx = POPULARITY[ri] ? POPULARITY[ri].idx : -1;
+      if(idx < 0) return;
+      row.onclick = function(){
+        document.getElementById('f'+idx).scrollIntoView({behavior:'smooth'});
+      };
+    });
+  }, 600);
+})();
+
+/* ── FLAVOR TICKER: show flavor number too ── */
+var origObs = obs; // already defined
+// patch the ticker update inside the existing observer
+// We'll wrap the ticker update via MutationObserver on #flavor-ticker textContent
+(function patchTicker(){
+  var ticker = document.getElementById('flavor-ticker');
+  if(!ticker) return;
+  var lastText = '';
+  setInterval(function(){
+    if(ticker.textContent !== lastText && ticker.textContent){
+      lastText = ticker.textContent;
+      // find index
+      for(var fi=0;fi<F.length;fi++){
+        if(F[fi].name === lastText){
+          ticker.textContent = (fi<9?'0':'')+(fi+1)+' · '+F[fi].name;
+          break;
+        }
+      }
+    }
+  }, 100);
+})();
+
+/* ── SMOOTH MARQUEE PAUSE → PLAY on visibility ── */
+(function(){
+  var track = document.getElementById('marqueeTrack');
+  if(!track) return;
+  document.addEventListener('visibilitychange', function(){
+    track.style.animationPlayState = document.hidden ? 'paused' : 'running';
+  });
+})();
+
+/* ── VOTE: sync sound-btn label in mobile menu ── */
+var origToggleSound = toggleSound;
+toggleSound = function(){
+  origToggleSound();
+  var mobBtn = document.getElementById('mob-sound-btn');
+  var isOn   = soundOn;
+  if(mobBtn) mobBtn.innerHTML = (isOn ? '&#128266;' : '&#128263;') + ' Sound ' + (isOn ? 'On' : 'Off');
+};
+
 </script>
 </body>
 </html>
