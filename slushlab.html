@@ -449,18 +449,43 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
 }
 
 @media(max-width:760px){
-  .fsec-card,.fsec:nth-child(even) .fsec-card{flex-direction:column;gap:2rem;align-items:center}
-  .finfo{text-align:center;max-width:100%}
+  /* cup: simple 2D entrance */
+  .fsec-card,.fsec:nth-child(even) .fsec-card{
+    flex-direction:column;gap:1.8rem;align-items:center;
+    transform:translateY(50px);opacity:0;
+    transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .6s ease;
+    perspective:none!important;
+  }
+  .fsec-card.in,.fsec:nth-child(even) .fsec-card.in{
+    transform:translateY(0)!important;opacity:1!important;
+  }
+  /* cup sizing */
+  .cup-pour-outer{flex:0 0 240px!important;width:240px!important;height:320px!important;transform-style:flat!important}
+  .cup-wrap{position:relative!important;width:100%!important;height:100%!important}
+  .cup-wrap svg{width:100%!important;height:100%!important;display:block!important}
+  /* pour on mobile: simple pop */
+  .cup-pour-outer.pouring{animation:cupMobilePop .5s cubic-bezier(.34,1.56,.64,1) both!important}
+  /* layout */
+  .finfo{text-align:center;max-width:100%;width:100%;padding:0 .5rem}
   .ing-row,.fstats,.hero-ctas,.mood-words,.combo-pickers,.res-btns{justify-content:center}
+  .fsec{padding:5rem 1rem 3rem;min-height:100vh}
   nav{padding:1rem 1.5rem}
   .nav-links li:not(:last-child){display:none}
-  .cup-pour-outer{flex:0 0 220px!important;height:300px!important}
+  .fname{font-size:clamp(1.8rem,8vw,2.8rem)}
+  .fdesc{font-size:.88rem}
+  .fstats{gap:.5rem}
+  .fstat{padding:.45rem .75rem;font-size:.7rem}
+  .fstat b{font-size:.9rem}
+  .formula-label{width:70px;font-size:.65rem}
+  .formula-card{padding:.85rem 1rem}
+  .moodboard{padding:.85rem 1rem}
   #flavor-ticker{display:none}
   #order-bar{padding:.8rem 1.2rem}
   .footer-top{flex-direction:column;gap:2rem}
-  .stats-inner{gap:2rem 3rem}
-  .formula-label{width:72px}
   .lab-tubes-grid{gap:1.1rem}
+  .lab-mixer-body{flex-direction:column;align-items:center}
+  .lm-picker{min-width:unset;width:100%}
+  .lm-flavor-pills{flex-direction:row;flex-wrap:wrap;justify-content:center;max-height:none}
   .tube-col{width:60px}
   .pop-bar-wrap{display:none}
   .drawer-flavors{gap:.5rem}
@@ -530,13 +555,8 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
 .flavor-share-btn:hover{color:var(--fc);border-color:var(--fc-border);background:var(--fc-dim)}
 .flavor-share-btn.copied{color:#4CBF24;border-color:rgba(76,191,36,.4);background:rgba(76,191,36,.08)}
 
-/* ── SCROLL SNAP (mobile) ── */
+/* ── MOBILE NAV ── */
 @media(max-width:760px){
-  #flavors{scroll-snap-type:y mandatory;overflow-y:auto;height:100vh;overscroll-behavior:none}
-  .fsec{scroll-snap-align:start;min-height:100vh}
-  .fsec-card,.fsec:nth-child(even) .fsec-card{transform:translateY(40px) scale(.95)!important}
-  .fsec-card.in,.fsec:nth-child(even) .fsec-card.in{transform:none!important}
-  .cup-pour-outer{transform-style:flat}
   #burger{display:flex}
   .nav-links{display:none!important}
 }
@@ -818,6 +838,8 @@ footer{padding:6rem 3rem 5rem;text-align:center;background:linear-gradient(180de
   .lm-pill{padding:.45rem 1rem;font-size:.78rem}
   .branch-map-btn{padding:.6rem 0}
 }
+
+@keyframes cupMobilePop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
 </style>
 </head>
 <body>
@@ -1780,7 +1802,8 @@ var obs=new IntersectionObserver(function(entries){
   entries.forEach(function(e){
     var idx=parseInt(e.target.getAttribute('data-i'));
     if(e.isIntersecting){
-      e.target.classList.add('in'); triggerPour(e.target,F[idx].color);
+      e.target.classList.add('in');
+      if(!isMobile()) triggerPour(e.target,F[idx].color);
       if(prevIdx!==idx){if(prevIdx>=0)playWhoosh();playFizzCrunch(F[idx].color);prevIdx=idx;}
       inViewSet[idx]=true; activeF=F[idx];
       dots.forEach(function(d,i){d.classList.toggle('active',i===idx);});
@@ -1791,11 +1814,11 @@ var obs=new IntersectionObserver(function(entries){
       orderBar.style.borderColor=F[idx].border; setActiveColor(F[idx].color); orderBar.classList.add('show');
       updateCounter(idx);
     } else {
-      if(inViewSet[idx]){shatterCup(e.target,F[idx].color);inViewSet[idx]=false;}
+      if(inViewSet[idx]&&!isMobile()){shatterCup(e.target,F[idx].color);inViewSet[idx]=false;}
       e.target.classList.remove('in');
     }
   });
-},{threshold:.1,rootMargin:'0px 0px -5% 0px'});
+},{threshold:0,rootMargin:'0px 0px 0px 0px'});
 cards.forEach(function(c){obs.observe(c);});
 
 var heroObs=new IntersectionObserver(function(e){
@@ -1818,6 +1841,7 @@ function backToTop(){
 
 /* ── 3D TILT ── */
 (function(){
+  if('ontouchstart' in window || window.innerWidth<=760) return;
   document.querySelectorAll('.fsec').forEach(function(sec){
     sec.addEventListener('mousemove',function(e){
       var outer=sec.querySelector('.cup-pour-outer'); if(!outer) return;
@@ -2554,6 +2578,40 @@ toggleSound = function(){
   var isOn   = soundOn;
   if(mobBtn) mobBtn.innerHTML = (isOn ? '&#128266;' : '&#128263;') + ' Sound ' + (isOn ? 'On' : 'Off');
 };
+
+
+/* ── MOBILE DETECTION ── */
+function isMobile(){
+  return window.innerWidth<=760||'ontouchstart' in window;
+}
+
+/* ── FORCE SHOW CUPS ALREADY VISIBLE ON LOAD ── */
+(function checkVisible(){
+  setTimeout(function(){
+    document.querySelectorAll('.fsec-card').forEach(function(card){
+      var rect=card.getBoundingClientRect();
+      if(rect.top<window.innerHeight*1.1&&rect.bottom>-50){
+        card.classList.add('in');
+        var idx=parseInt(card.getAttribute('data-i'));
+        if(!isNaN(idx)){
+          setActiveColor(F[idx].color);
+          orderBar.classList.add('show');
+          orderName.textContent=F[idx].name;
+          orderName.style.color=F[idx].color;
+          orderBtn.style.background=F[idx].color;
+          navAccent.style.background=F[idx].color;
+        }
+      }
+    });
+  },500);
+})();
+
+/* ── PASSIVE TOUCH on sections ── */
+(function(){
+  document.querySelectorAll('.fsec').forEach(function(sec){
+    sec.addEventListener('touchmove',function(){},{passive:true});
+  });
+})();
 
 </script>
 </body>
